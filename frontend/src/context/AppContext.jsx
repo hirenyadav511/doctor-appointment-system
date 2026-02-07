@@ -43,10 +43,18 @@ const AppContextProvider = (props) => {
             if (data.success) {
                 setUserData(data.userData)
             } else {
+                if (data.message && (data.message.includes('Not Authorized') || data.message.includes('Login Again'))) {
+                    setToken('')
+                    localStorage.removeItem('token')
+                }
                 toast.error(data.message)
             }
 
         } catch (error) {
+            if (error.response?.data?.message?.includes('Not Authorized')) {
+                setToken('')
+                localStorage.removeItem('token')
+            }
             console.log(error)
             toast.error(error.message)
         }

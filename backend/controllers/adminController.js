@@ -94,7 +94,8 @@ const addDoctor = async (req, res) => {
         // Otherwise store a placeholder URL so the schema requirement is satisfied.
         const cloudinaryConfigured = !!(process.env.CLOUDINARY_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_SECRET_KEY)
 
-        let imageUrl = "https://via.placeholder.com/256"
+        // Use inline placeholder (no external DNS) to avoid ERR_NAME_NOT_RESOLVED
+        let imageUrl = "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Crect fill='%23e5e7eb' width='256' height='256'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%239ca3af' font-size='24' font-family='sans-serif'%3ENo Image%3C/text%3E%3C/svg%3E"
 
         if (imageFile && cloudinaryConfigured) {
             const imageUpload = await cloudinary.uploader.upload(imageFile.path, { resource_type: "image" })

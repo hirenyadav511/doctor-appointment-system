@@ -3,10 +3,20 @@
 @tailwind components;
 @tailwind utilities;
 
-*{
-    font-family: Outfit;
+@layer base {
+    body {
+        @apply bg-[#F8F9FD] text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 ease-in-out font-outfit;
+    }
 }
 
-::-webkit-scrollbar{
-    display: none;
+::-webkit-scrollbar {
+    @apply w-1.5
+}
+
+::-webkit-scrollbar-track {
+    @apply bg-transparent
+}
+
+::-webkit-scrollbar-thumb {
+    @apply bg-gray-300 dark:bg-gray-700 rounded-full
 }

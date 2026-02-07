@@ -1,5 +1,6 @@
 import React from "react";
 import Navbar from "./components/Navbar";
+import ClerkSync from "./components/ClerkSync";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Doctors from "./pages/Doctors";
@@ -18,6 +19,7 @@ import Payment from "./pages/Payment";
 const App = () => {
   return (
     <div className="mx-4 sm:mx-[10%]">
+      <ClerkSync />
       <ToastContainer />
       <Navbar />
       <Routes>

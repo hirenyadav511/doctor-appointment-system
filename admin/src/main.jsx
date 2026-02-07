@@ -7,14 +7,18 @@ import AdminContextProvider from './context/AdminContext.jsx'
 import DoctorContextProvider from './context/DoctorContext.jsx'
 import AppContextProvider from './context/AppContext.jsx'
 
+import ThemeContextProvider from './context/ThemeContext.jsx'
+
 ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
-    <AdminContextProvider>
-      <DoctorContextProvider>
-        <AppContextProvider>
-          <App />
-        </AppContextProvider>
-      </DoctorContextProvider>
-    </AdminContextProvider>
+    <ThemeContextProvider>
+      <AdminContextProvider>
+        <DoctorContextProvider>
+          <AppContextProvider>
+            <App />
+          </AppContextProvider>
+        </DoctorContextProvider>
+      </AdminContextProvider>
+    </ThemeContextProvider>
   </BrowserRouter>,
 )
