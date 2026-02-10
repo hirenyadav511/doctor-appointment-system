@@ -1,6 +1,6 @@
-# Prescripto - Doctor Appointment Web App
+# HealthLoop - Doctor Appointment Web App
 
-**Prescripto** is a full-stack web application designed to make healthcare more accessible by simplifying the process of booking doctor appointments. It offers three levels of login: **Patient**, **Doctor**, and **Admin**, each with distinct features tailored to their roles. The app integrates **Stripe online payments** to facilitate seamless and secure transactions. Built using the **MERN stack** (MongoDB, Express.js, React.js, and Node.js), Prescripto provides an efficient and user-friendly experience for both patients and healthcare providers.
+**HealthLoop** is a full-stack web application designed to make healthcare more accessible by simplifying the process of booking doctor appointments. It offers three levels of login: **Patient**, **Doctor**, and **Admin**, each with distinct features tailored to their roles. The app integrates **Stripe online payments** to facilitate seamless and secure transactions. Built using the **MERN stack** (MongoDB, Express.js, React.js, and Node.js), HealthLoop provides an efficient and user-friendly experience for both patients and healthcare providers.
 
 ---
 
@@ -53,7 +53,7 @@
 ---
 
 ## 📄 About Page
-- Information about Prescripto’s vision and mission.
+- Information about HealthLoop’s vision and mission.
 - Why Choose Us:
   - Efficiency
   - Convenience
@@ -120,8 +120,8 @@ To set up and run this project locally:
 
 1. **Clone the Repository**:
    ```bash
-   git clone https://github.com/your-username/prescripto.git
-   cd prescripto
+   git clone https://github.com/your-username/healthloop.git
+   cd healthloop
    ```
 
 2. **Install Dependencies**:
@@ -149,7 +149,7 @@ To set up and run this project locally:
 ## 📦 Folder Structure
 
 ```plaintext
-prescripto/
+healthloop/
 ├── client/          # Frontend (React.js)
 ├── server/          # Backend (Node.js, Express.js)
 ├── models/          # MongoDB Schemas

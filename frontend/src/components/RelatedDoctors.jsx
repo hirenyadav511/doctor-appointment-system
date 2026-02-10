@@ -22,8 +22,8 @@ const RelatedDoctors = ({ speciality, docId }) => {
             <div className='w-full grid grid-cols-auto gap-4 pt-5 gap-y-6 px-3 sm:px-0'>
                 {relDoc.map((item, index) => (
                     <div onClick={() => { navigate(`/appointment/${item._id}`); scrollTo(0, 0) }} className='group border border-blue-200 dark:border-gray-700 rounded-xl overflow-hidden cursor-pointer hover:shadow-lg hover:-translate-y-2 transition-all duration-300 bg-white dark:bg-gray-800' key={index}>
-                        <div className="overflow-hidden relative">
-                            <img className='bg-blue-50 dark:bg-gray-700 w-full object-cover group-hover:scale-110 transition-transform duration-500' src={item.image} alt="" />
+                        <div className="h-64 overflow-hidden relative">
+                            <img className='bg-blue-50 dark:bg-gray-700 w-full h-full object-contain group-hover:scale-105 transition-transform duration-500' src={item.image} alt="" />
                         </div>
                         <div className='p-4'>
                             <div className={`flex items-center gap-2 text-sm text-center ${item.available ? 'text-green-500' : "text-gray-500"}`}>
