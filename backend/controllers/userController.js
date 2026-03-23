@@ -5,11 +5,26 @@ import userModel from "../models/userModel.js";
 import doctorModel from "../models/doctorModel.js";
 import appointmentModel from "../models/appointmentModel.js";
 import otpModel from "../models/otpModel.js";
-import { sendOtpEmail } from "../utils/emailService.js";
+import doctorAvailabilityModel from "../models/DoctorAvailability.js";
+
 import { v2 as cloudinary } from "cloudinary";
 import stripe from "stripe";
-import razorpay from "razorpay";
-import razorpayInstance from "../config/razorpay.js";
+import { initializeApp } from "firebase/app";
+import { getFirestore, doc, setDoc, serverTimestamp } from "firebase/firestore";
+
+// Your web app's Firebase configuration
+const firebaseConfig = {
+  apiKey: "AIzaSyCnlWUX2rNl0Ir3a4_5fiFNylWVBdc-TR8",
+  authDomain: "my-react-firebase-app-fc0e6.firebaseapp.com",
+  projectId: "my-react-firebase-app-fc0e6",
+  storageBucket: "my-react-firebase-app-fc0e6.firebasestorage.app",
+  messagingSenderId: "80722317318",
+  appId: "1:80722317318:web:6530a2ede48b7853f93387"
+};
+
+// Initialize Firebase
+const firebaseApp = initializeApp(firebaseConfig);
+const db = getFirestore(firebaseApp);
 
 const OTP_EXPIRY_MINUTES = 5;
 const OTP_COOLDOWN_SECONDS = 60;
@@ -77,9 +92,10 @@ const sendOtp = async (req, res) => {
       expiresAt,
     });
 
-    await sendOtpEmail(email, otp);
+    // SIMPLIFIED: Log OTP to console instead of emailing
+    console.log(`\n=== OTP for ${email}: ${otp} ===\n`);
 
-    res.json({ success: true, message: "OTP sent to your email" });
+    res.json({ success: true, message: "OTP generated (Check Console)" });
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message || "Failed to send OTP" });
@@ -245,11 +261,58 @@ const bookAppointment = async (req, res) => {
       return res.json({ success: false, message: "Doctor Not Available" });
     }
 
+    // --- New: Validation against DoctorAvailability ---
+    const [day, month, year] = slotDate.split('_').map(Number);
+    const dateObj = new Date(year, month - 1, day);
+    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayName = dayNames[dateObj.getDay()];
+
+    const dayAvailability = await doctorAvailabilityModel.find({ doctorId: docId, day: dayName, isAvailable: true });
+    
+    if (dayAvailability.length === 0) {
+        return res.json({ success: false, message: "Doctor does not have a schedule set for this day" });
+    }
+
+    // Check if slotTime falls within any availability window for that day
+    const isWithinAvailability = dayAvailability.some(avail => {
+        const [startH, startM] = avail.startTime.split(':').map(Number);
+        const [endH, endM] = avail.endTime.split(':').map(Number);
+        
+        // Convert slotTime (e.g. "10:30 AM") to 24h format for comparison
+        // Note: Slot generation uses toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+        // We'll normalize both to minutes-from-midnight
+        const timeMatch = req.body.slotTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+        if (!timeMatch) return false;
+        
+        let [_, hours, mins, ampm] = timeMatch;
+        hours = parseInt(hours);
+        mins = parseInt(mins);
+        if (ampm.toUpperCase() === 'PM' && hours !== 12) hours += 12;
+        if (ampm.toUpperCase() === 'AM' && hours === 12) hours = 0;
+        
+        const slotMinutes = hours * 60 + mins;
+        const startMinutes = startH * 60 + startM;
+        const endMinutes = endH * 60 + endM;
+
+        return slotMinutes >= startMinutes && slotMinutes < endMinutes;
+    });
+
+    if (!isWithinAvailability) {
+        return res.json({ success: false, message: "Requested time is outside doctor's available hours" });
+    }
+    // --- End Validation ---
+
     let slots_booked = docData.slots_booked;
+
+    // DEBUG LOGGING
+    console.log("--- Booking Attempt ---");
+    console.log("Request Date:", slotDate, "| Request Time:", slotTime);
+    console.log("Current Slots Booked:", JSON.stringify(slots_booked));
 
     // checking for slot availablity
     if (slots_booked[slotDate]) {
       if (slots_booked[slotDate].includes(slotTime)) {
+        console.log(`!!! REJECTING BOOKING: Slot ${slotDate} ${slotTime} is alreay in ${JSON.stringify(slots_booked[slotDate])}`);
         return res.json({ success: false, message: "Slot Not Available" });
       } else {
         slots_booked[slotDate].push(slotTime);
@@ -280,7 +343,25 @@ const bookAppointment = async (req, res) => {
     // save new slots data in docData
     await doctorModel.findByIdAndUpdate(docId, { slots_booked });
 
-    res.json({ success: true, message: "Appointment Booked" });
+    // --- Firebase Firestore Trigger (Email) ---
+    try {
+      // Use MongoDB ID as Firestore Doc ID for consistency
+      await setDoc(doc(db, "appointments", newAppointment._id.toString()), {
+        bookingId: newAppointment._id.toString(),
+        patientName: userData.name,
+        patientEmail: userData.email, // Ensure this exists in userData
+        doctorName: docData.name,
+        date: slotDate,
+        time: slotTime,
+        status: "Pending",
+        createdAt: serverTimestamp(),
+      });
+      console.log(`Firestore appointment created: ${newAppointment._id}`);
+      return res.json({ success: true, message: "Appointment Booked" });
+    } catch (firebaseError) {
+      console.error("Firebase Firestore Write Failed:", firebaseError.message);
+      return res.json({ success: true, message: "Appointment Booked" });
+    }
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
@@ -299,7 +380,7 @@ const cancelAppointment = async (req, res) => {
     }
 
     await appointmentModel.findByIdAndUpdate(appointmentId, {
-      cancelled: true,
+      status: "Cancelled",
     });
 
     // releasing doctor slot
@@ -335,56 +416,6 @@ const listAppointment = async (req, res) => {
   }
 };
 
-// API to make payment of appointment using razorpay
-const paymentRazorpay = async (req, res) => {
-  try {
-    const { appointmentId } = req.body;
-    const appointmentData = await appointmentModel.findById(appointmentId);
-
-    if (!appointmentData || appointmentData.cancelled) {
-      return res.json({
-        success: false,
-        message: "Appointment Cancelled or not found",
-      });
-    }
-
-    // creating options for razorpay payment
-    const options = {
-      amount: appointmentData.amount * 100,
-      currency: process.env.CURRENCY,
-      receipt: appointmentId,
-    };
-
-    // creation of an order
-    const order = await razorpayInstance.orders.create(options);
-
-    res.json({ success: true, order });
-  } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
-  }
-};
-
-// API to verify payment of razorpay
-const verifyRazorpay = async (req, res) => {
-  try {
-    const { razorpay_order_id } = req.body;
-    const orderInfo = await razorpayInstance.orders.fetch(razorpay_order_id);
-
-    if (orderInfo.status === "paid") {
-      await appointmentModel.findByIdAndUpdate(orderInfo.receipt, {
-        payment: true,
-      });
-      res.json({ success: true, message: "Payment Successful" });
-    } else {
-      res.json({ success: false, message: "Payment Failed" });
-    }
-  } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
-  }
-};
-
 // API to make payment of appointment using Stripe
 const paymentStripe = async (req, res) => {
   try {
@@ -393,7 +424,7 @@ const paymentStripe = async (req, res) => {
 
     const appointmentData = await appointmentModel.findById(appointmentId);
 
-    if (!appointmentData || appointmentData.cancelled) {
+    if (!appointmentData || appointmentData.status === "Cancelled") {
       return res.json({
         success: false,
         message: "Appointment Cancelled or not found",
@@ -458,8 +489,6 @@ export {
   bookAppointment,
   listAppointment,
   cancelAppointment,
-  paymentRazorpay,
-  verifyRazorpay,
   paymentStripe,
   verifyStripe,
   clerkLogin

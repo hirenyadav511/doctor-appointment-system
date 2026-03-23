@@ -14,6 +14,7 @@ const AdminContextProvider = (props) => {
     const [appointments, setAppointments] = useState([])
     const [doctors, setDoctors] = useState([])
     const [dashData, setDashData] = useState(false)
+    const [analyticsData, setAnalyticsData] = useState(false)
 
     // Getting all Doctors data from Database using API
     const getAllDoctors = async () => {
@@ -91,6 +92,23 @@ const AdminContextProvider = (props) => {
         }
 
     }
+    
+    // Function to update appointment status using API
+    const updateAppointmentStatus = async (appointmentId, status) => {
+        try {
+            const { data } = await axios.put(backendUrl + '/api/appointments/update-status/' + appointmentId, { status }, { headers: { aToken } })
+
+            if (data.success) {
+                toast.success(data.message)
+                getAllAppointments()
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+            console.log(error)
+        }
+    }
 
     // Getting Admin Dashboard data from Database using API
     const getDashData = async () => {
@@ -111,6 +129,23 @@ const AdminContextProvider = (props) => {
 
     }
 
+    // Getting Admin Analytics data from Database using API
+    const getAnalyticsData = async () => {
+        try {
+            const { data } = await axios.get(backendUrl + '/api/admin/analytics/stats', { headers: { aToken } })
+
+            if (data.success) {
+                setAnalyticsData(data.analytics)
+            } else {
+                toast.error(data.message)
+            }
+
+        } catch (error) {
+            console.log(error)
+            toast.error(error.message)
+        }
+    }
+
     const value = {
         aToken, setAToken,
         doctors,
@@ -120,7 +155,10 @@ const AdminContextProvider = (props) => {
         getAllAppointments,
         getDashData,
         cancelAppointment,
-        dashData
+        updateAppointmentStatus,
+        dashData,
+        analyticsData,
+        getAnalyticsData
     }
 
     return (

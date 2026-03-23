@@ -31,6 +31,33 @@ const loginDoctor = async (req, res) => {
     }
 }
 
+// API for doctor Reset Password
+const resetPassword = async (req, res) => {
+    try {
+        const { email, password } = req.body;
+        
+        if (!email || !password) {
+            return res.json({ success: false, message: "Missing Details" });
+        }
+
+        const user = await doctorModel.findOne({ email });
+        if (!user) {
+            return res.json({ success: false, message: "Doctor not found" });
+        }
+
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        await doctorModel.findByIdAndUpdate(user._id, { password: hashedPassword });
+
+        res.json({ success: true, message: "Password updated successfully" });
+
+    } catch (error) {
+        console.log(error);
+        res.json({ success: false, message: error.message });
+    }
+}
+
 // API to get doctor appointments for doctor panel
 const appointmentsDoctor = async (req, res) => {
     try {
@@ -54,7 +81,8 @@ const appointmentCancel = async (req, res) => {
 
         const appointmentData = await appointmentModel.findById(appointmentId)
         if (appointmentData && appointmentData.docId === docId) {
-            await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
+            await appointmentModel.findByIdAndUpdate(appointmentId, { status: "Cancelled" })
+
             return res.json({ success: true, message: 'Appointment Cancelled' })
         }
 
@@ -75,7 +103,8 @@ const appointmentComplete = async (req, res) => {
 
         const appointmentData = await appointmentModel.findById(appointmentId)
         if (appointmentData && appointmentData.docId === docId) {
-            await appointmentModel.findByIdAndUpdate(appointmentId, { isCompleted: true })
+            await appointmentModel.findByIdAndUpdate(appointmentId, { status: "Completed" })
+
             return res.json({ success: true, message: 'Appointment Completed' })
         }
 
@@ -160,7 +189,7 @@ const doctorDashboard = async (req, res) => {
         let earnings = 0
 
         appointments.map((item) => {
-            if (item.isCompleted || item.payment) {
+            if (item.status === "Completed" || item.payment) {
                 earnings += item.amount
             }
         })
@@ -199,5 +228,6 @@ export {
     appointmentComplete,
     doctorDashboard,
     doctorProfile,
-    updateDoctorProfile
+    updateDoctorProfile,
+    resetPassword
 }

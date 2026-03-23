@@ -1,6 +1,7 @@
+import dotenv from "dotenv";
+import "dotenv/config";
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import Stripe from "stripe";
 
 import connectDB from "./config/mongodb.js";
@@ -9,24 +10,31 @@ import connectCloudinary from "./config/cloudinary.js";
 import adminRouter from "./routes/adminRoute.js";
 import doctorRouter from "./routes/doctorRoute.js";
 import userRouter from "./routes/userRoute.js";
+import medicalHistoryRouter from "./routes/medicalHistoryRoutes.js";
+import availabilityRouter from "./routes/availabilityRoutes.js";
+import analyticsRouter from "./routes/analyticsRoutes.js";
+import reviewRouter from "./routes/reviewRoutes.js";
+import appointmentRouter from "./routes/appointmentRoute.js";
 
-dotenv.config();
-
+// App Config
 const app = express();
+const PORT = process.env.PORT || 4000;
+connectDB();
+connectCloudinary();
+
+// Middlewares
 app.use(express.json());
 app.use(cors());
-
-// Initialize integrations
-await connectDB();
-await connectCloudinary();
-
-// Health check
-app.get("/", (req, res) => res.send("API is running"));
 
 // API routes
 app.use("/api/admin", adminRouter);
 app.use("/api/doctor", doctorRouter);
 app.use("/api/user", userRouter);
+app.use("/api/medical-history", medicalHistoryRouter);
+app.use("/api/availability", availabilityRouter);
+app.use("/api/admin/analytics", analyticsRouter);
+app.use("/api/reviews", reviewRouter);
+app.use("/api/appointments", appointmentRouter);
 
 /**
  * Legacy Stripe endpoint used by `frontend/src/components/PaymentForm.jsx`.
@@ -59,5 +67,8 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-const PORT = process.env.PORT || 5000;
+app.get('/', (req, res) => {
+  res.send('API Working')
+})
+
 app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));

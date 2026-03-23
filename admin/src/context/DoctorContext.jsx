@@ -92,6 +92,24 @@ const DoctorContextProvider = (props) => {
 
     }
 
+    // Function to update appointment status using API
+    const updateAppointmentStatus = async (appointmentId, status) => {
+        try {
+            const { data } = await axios.put(backendUrl + '/api/appointments/update-status/' + appointmentId, { status }, { headers: { dToken } })
+
+            if (data.success) {
+                toast.success(data.message)
+                getAppointments()
+                getDashData()
+            } else {
+                toast.error(data.message)
+            }
+        } catch (error) {
+            toast.error(error.message)
+            console.log(error)
+        }
+    }
+
     // Getting Doctor dashboard data using API
     const getDashData = async () => {
         try {
@@ -117,6 +135,7 @@ const DoctorContextProvider = (props) => {
         getAppointments,
         cancelAppointment,
         completeAppointment,
+        updateAppointmentStatus,
         dashData, getDashData,
         profileData, setProfileData,
         getProfileData,

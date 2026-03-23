@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "./components/Navbar";
 import ClerkSync from "./components/ClerkSync";
 import { Routes, Route } from "react-router-dom";
@@ -10,6 +9,7 @@ import Contact from "./pages/Contact";
 import Appointment from "./pages/Appointment";
 import MyAppointments from "./pages/MyAppointments";
 import MyProfile from "./pages/MyProfile";
+import MedicalHistory from "./pages/MedicalHistory";
 import Footer from "./components/Footer";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -32,6 +32,7 @@ const App = () => {
         <Route path="/appointment/:docId" element={<Appointment />} />
         <Route path="/my-appointments" element={<MyAppointments />} />
         <Route path="/my-profile" element={<MyProfile />} />
+        <Route path="/medical-history" element={<MedicalHistory />} />
         <Route path="/verify" element={<Verify />} />
         <Route path="/payment" element={<Payment />} />
       </Routes>

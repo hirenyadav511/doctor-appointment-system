@@ -51,7 +51,12 @@ const appointmentCancel = async (req, res) => {
     try {
 
         const { appointmentId } = req.body
-        await appointmentModel.findByIdAndUpdate(appointmentId, { cancelled: true })
+        const appointmentData = await appointmentModel.findByIdAndUpdate(appointmentId, { status: "Cancelled" })
+
+        // appointmentData here is the OLD document (before update) by default unless {new: true} is passed.
+        // But we need the data anyway.
+        // Wait, findByIdAndUpdate returns null if not found? No, it returns document.
+        // Defaults to returning the document BEFORE modification. This is fine for getting details.
 
         res.json({ success: true, message: 'Appointment Cancelled' })
 

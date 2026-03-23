@@ -18,22 +18,24 @@
 
 ### 👤 Patient Login
 - Sign up and login securely.
-- Book doctor appointments.
+- Book doctor appointments with **Dynamic Time Slots**.
+- **Medical History**: View your past diagnoses and prescriptions.
+- **Rating & Reviews**: Rate your doctors after completed appointments.
 - View, cancel, or reschedule appointments.
 - Online payment using **Stripe** or **Cash**.
-- Manage profile (name, email, address, gender, birthday, profile picture).
+- Manage profile with profile picture upload.
 
 ### 🩺 Doctor Login
-- View and manage appointments.
-- Dashboard showing earnings, patients, and appointments.
-- Update profile details (fees, description, availability).
-- View appointment details with payment status.
+- **Availability Calendar**: Set your own working days, times, and slot durations.
+- **Medical Record Management**: Add diagnoses and prescriptions for patients.
+- **Role-Based Workflow**: Manage appointment lifecycle (Confirm, Start Consultation, Complete).
+- Dashboard with earnings and patient growth analytics.
+- Profile management with rating display.
 
 ### 🛠️ Admin Login
-- Create and manage doctor profiles.
-- Dashboard analytics (doctors, patients, appointments).
-- Add, edit, or remove doctors.
-- Manage all appointments (cancel / mark completed).
+- **Role-Based Workflow**: Manage systems and confirm/cancel appointments.
+- Advanced Analytics: Interactive charts for revenue and appointment trends.
+- Manage all medical professional profiles. goals.
 
 ---
 
@@ -98,7 +100,7 @@
 
 ### Appointments
 - View all appointments.
-- Cancel or mark as completed.
+- Confirm or Cancel appointments (Role-Restricted).
 
 ---
 
@@ -106,6 +108,24 @@
 - Earnings overview.
 - Appointment list with patient details.
 - Profile management.
+
+---
+
+## 🏥 Appointment Status Workflow
+
+HealthLoop implements a professional medical workflow for appointments with strict role-based access control:
+
+- **Patient books appointment** → Status: `Pending`
+- **Doctor/Admin confirms** → Status: `Confirmed`
+- **Doctor starts consultation** → Status: `Consultation In Progress`
+- **Doctor finishes** → Status: `Completed`
+
+### 🎨 Status Indicators (Colored Badges)
+- <span style="color: #ca8a04">●</span> **Pending**: Initial booking status.
+- <span style="color: #16a34a">●</span> **Confirmed**: Appointment approved by staff.
+- <span style="color: #2563eb">●</span> **Consultation In Progress**: Professional medical status during the visit.
+- <span style="color: #059669">●</span> **Completed**: Consultation finalized.
+- <span style="color: #dc2626">●</span> **Cancelled**: Appointment nullified by patient, doctor, or admin.
 
 ---
 
@@ -150,15 +170,14 @@ To set up and run this project locally:
 
 ```plaintext
 healthloop/
-├── client/          # Frontend (React.js)
-├── server/          # Backend (Node.js, Express.js)
-├── models/          # MongoDB Schemas
-├── controllers/     # API Controllers
-├── routes/          # API Routes
-├── middleware/      # Authentication and Error Handling
-├── config/          # Configuration Files
-├── utils/           # Utility Functions
-├── public/          # Static Files
+├── frontend/        # Patient Dashboard (React.js + Tailwind CSS)
+├── admin/           # Admin & Doctor Panel (React.js + Tailwind CSS)
+├── backend/         # Node.js & Express.js Server
+│   ├── models/      # MongoDB Mongoose Schemas
+│   ├── controllers/ # Business Logic & API Controllers
+│   ├── routes/      # Express API Routes
+│   ├── middleware/  # JWT Auth & Security
+│   └── config/      # Database & Cloudinary Connection
 └── .env             # Environment Variables
 ```
 
@@ -172,4 +191,3 @@ We welcome contributions! Please feel free to submit issues, fork the repository
 - Thanks to the developers and contributors of MongoDB, Express.js, React.js, Node.js, Stripe, and Razorpay for their fantastic tools and libraries.
 
 ---
-

@@ -5,7 +5,7 @@ import { AppContext } from '../context/AppContext'
 
 /**
  * Runs Clerk → backend token sync globally so it works after redirect or refresh.
- * When Clerk user exists and we don't have a token (or need one), call clerk-login.
+ * When Clerk user exists and we don&apos;t have a token (or need one), call clerk-login.
  * When user signs out from Clerk (isLoaded && !user), clear our token.
  */
 export default function ClerkSync() {

@@ -40,6 +40,14 @@ const Sidebar = () => {
           <img className='min-w-5 dark:invert' src={assets.appointment_icon} alt='' />
           <p className='hidden md:block'>Appointments</p>
         </NavLink>
+        <NavLink to={'/doctor-medical-history'} className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer transition-all ${isActive ? 'bg-[#F2F3FF] dark:bg-gray-800 border-r-4 border-primary text-gray-900 dark:text-white' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
+          <img className='min-w-5 dark:invert' src={assets.list_icon} alt='' />
+          <p className='hidden md:block'>Medical History</p>
+        </NavLink>
+        <NavLink to={'/manage-availability'} className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer transition-all ${isActive ? 'bg-[#F2F3FF] dark:bg-gray-800 border-r-4 border-primary text-gray-900 dark:text-white' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
+          <img className='min-w-5 dark:invert' src={assets.appointment_icon} alt='' />
+          <p className='hidden md:block'>Manage Availability</p>
+        </NavLink>
         <NavLink to={'/doctor-profile'} className={({ isActive }) => `flex items-center gap-3 py-3.5 px-3 md:px-9 md:min-w-72 cursor-pointer transition-all ${isActive ? 'bg-[#F2F3FF] dark:bg-gray-800 border-r-4 border-primary text-gray-900 dark:text-white' : 'hover:bg-gray-50 dark:hover:bg-gray-800'}`}>
           <img className='min-w-5 dark:invert' src={assets.people_icon} alt='' />
           <p className='hidden md:block'>Profile</p>

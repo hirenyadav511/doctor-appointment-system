@@ -4,20 +4,28 @@ import { useEffect } from 'react'
 import { DoctorContext } from '../../context/DoctorContext'
 import { assets } from '../../assets/assets'
 import { AppContext } from '../../context/AppContext'
+import DoctorAddMedicalRecord from '../../components/DoctorAddMedicalRecord'
 
 const DoctorDashboard = () => {
 
-  const { dToken, dashData, getDashData, cancelAppointment, completeAppointment } = useContext(DoctorContext)
+  const { dToken, dashData, getDashData, cancelAppointment, completeAppointment, updateAppointmentStatus } = useContext(DoctorContext)
   const { slotDateFormat, currency } = useContext(AppContext)
 
+  const [selectedAppointment, setSelectedAppointment] = React.useState(null)
 
   useEffect(() => {
-
     if (dToken) {
       getDashData()
     }
-
   }, [dToken])
+
+  const statusColors = {
+    "Pending": "bg-yellow-100 text-yellow-800 border-yellow-200",
+    "Confirmed": "bg-green-100 text-green-800 border-green-200",
+    "Consultation In Progress": "bg-blue-100 text-blue-800 border-blue-200",
+    "Completed": "bg-emerald-100 text-emerald-800 border-emerald-200",
+    "Cancelled": "bg-red-100 text-red-800 border-red-200"
+  }
 
   return dashData && (
     <div className='m-5'>
@@ -68,19 +76,60 @@ const DoctorDashboard = () => {
                 <p className='text-gray-800 dark:text-white font-medium text-base'>{item.userData.name}</p>
                 <p className='text-gray-500 dark:text-gray-400 text-sm'>Booking on {slotDateFormat(item.slotDate)}</p>
               </div>
-              {item.cancelled
-                ? <span className='bg-red-100 text-red-600 dark:bg-red-900/30 dark:text-red-400 py-1 px-3 rounded-full text-xs font-medium'>Cancelled</span>
-                : item.isCompleted
-                  ? <span className='bg-green-100 text-green-600 dark:bg-green-900/30 dark:text-green-400 py-1 px-3 rounded-full text-xs font-medium'>Completed</span>
-                  : <div className='flex gap-2'>
-                    <img onClick={() => cancelAppointment(item._id)} className='w-10 cursor-pointer hover:scale-110 transition-transform' src={assets.cancel_icon} alt="Cancel" />
-                    <img onClick={() => completeAppointment(item._id)} className='w-10 cursor-pointer hover:scale-110 transition-transform' src={assets.tick_icon} alt="Tick" />
+              <div className='flex flex-wrap items-center gap-2'>
+                <span className={`px-2 py-1 border rounded-full text-[10px] font-medium ${statusColors[item.status]}`}>
+                  {item.status}
+                </span>
+
+                {item.status === "Pending" && (
+                  <div className='flex gap-1'>
+                    <button onClick={() => updateAppointmentStatus(item._id, 'Confirmed')} className='text-[10px] bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'>Confirm</button>
+                    <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[10px] bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'>Cancel</button>
                   </div>
-              }
+                )}
+
+                {item.status === "Confirmed" && (
+                  <div className='flex gap-1'>
+                    <button onClick={() => updateAppointmentStatus(item._id, 'Consultation In Progress')} className='text-[10px] bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600'>Start Consultation</button>
+                    <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[10px] bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'>Cancel</button>
+                  </div>
+                )}
+
+                {item.status === "Consultation In Progress" && (
+                  <button onClick={() => updateAppointmentStatus(item._id, 'Completed')} className='text-[10px] bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600'>Mark Completed</button>
+                )}
+
+                {item.status === "Completed" && (
+                  <div className='flex flex-col gap-1 items-start'>
+                    {item.isMedicalRecordAdded ? (
+                      <p className='text-[10px] border border-green-500 bg-green-50 text-green-500 px-2 py-1 rounded'>
+                        Record Added
+                      </p>
+                    ) : (
+                      <button 
+                        onClick={() => setSelectedAppointment(item)}
+                        className='text-[10px] border border-primary text-primary px-2 py-1 rounded hover:bg-primary hover:text-white transition-all'>
+                        Add Record
+                      </button>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
           ))}
         </div>
       </div>
+
+      {selectedAppointment && (
+        <DoctorAddMedicalRecord
+          appointmentId={selectedAppointment._id}
+          patientId={selectedAppointment.userId}
+          onClose={() => setSelectedAppointment(null)}
+          onSuccess={() => {
+            getDashData()
+          }}
+        />
+      )}
 
     </div>
   )

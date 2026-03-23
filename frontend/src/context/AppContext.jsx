@@ -8,11 +8,19 @@ const AppContextProvider = (props) => {
 
     const currencySymbol = '₹'
     // Allow running without a frontend/.env in local dev
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5001'
 
     const [doctors, setDoctors] = useState([])
     const [token, setToken] = useState(localStorage.getItem('token') ? localStorage.getItem('token') : '')
     const [userData, setUserData] = useState(false)
+
+    const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+
+    // Function to format the date eg. ( 20_01_2000 => 20 Jan 2000 )
+    const slotDateFormat = (slotDate) => {
+        const dateArray = slotDate.split('_')
+        return dateArray[0] + " " + months[Number(dateArray[1]) - 1] + " " + dateArray[2]
+    }
 
     // Getting Doctors using API
     const getDoctosData = async () => {
@@ -76,7 +84,8 @@ const AppContextProvider = (props) => {
         currencySymbol,
         backendUrl,
         token, setToken,
-        userData, setUserData, loadUserProfileData
+        userData, setUserData, loadUserProfileData,
+        slotDateFormat
     }
 
     return (
