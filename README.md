@@ -158,7 +158,7 @@ To set up and run this project locally:
 1. **Clone the Repository**:
 
    ```bash
-   git clone https://github.com/your-username/medicare.git
+   git clone https://github.com/hirenyadav511/doctor-appointment-system.git
    cd medicare
    ```
 
