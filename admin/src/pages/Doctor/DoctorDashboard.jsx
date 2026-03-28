@@ -106,7 +106,7 @@ const DoctorDashboard = () => {
                         Record Added
                       </p>
                     ) : (
-                      <button 
+                      <button
                         onClick={() => setSelectedAppointment(item)}
                         className='text-[10px] border border-primary text-primary px-2 py-1 rounded hover:bg-primary hover:text-white transition-all'>
                         Add Record

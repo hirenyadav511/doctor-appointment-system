@@ -1,5 +1,10 @@
 import express from "express";
-import { addAvailability, getDoctorAvailability, updateAvailability, deleteAvailability } from "../controllers/availabilityController.js";
+import {
+  addAvailability,
+  getDoctorAvailability,
+  updateAvailability,
+  deleteAvailability,
+} from "../controllers/availabilityController.js";
 import authDoctor from "../middleware/authDoctor.js";
 
 const availabilityRouter = express.Router();

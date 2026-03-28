@@ -19,7 +19,7 @@ const firebaseConfig = {
   projectId: "my-react-firebase-app-fc0e6",
   storageBucket: "my-react-firebase-app-fc0e6.firebasestorage.app",
   messagingSenderId: "80722317318",
-  appId: "1:80722317318:web:6530a2ede48b7853f93387"
+  appId: "1:80722317318:web:6530a2ede48b7853f93387",
 };
 
 // Initialize Firebase
@@ -32,7 +32,9 @@ const OTP_COOLDOWN_SECONDS = 60;
 const getStripeInstance = () => {
   const key = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET;
   if (!key) {
-    throw new Error("Stripe is not configured. Set STRIPE_SECRET_KEY in backend/.env and restart the backend.");
+    throw new Error(
+      "Stripe is not configured. Set STRIPE_SECRET_KEY in backend/.env and restart the backend.",
+    );
   }
   return new stripe(key);
 };
@@ -40,11 +42,12 @@ const getStripeInstance = () => {
 // API to register user
 const registerUser = async (req, res) => {
   // Legacy support or fallback
-  res.json({ success: false, message: "Please use Clerk Sign-in" })
-}
+  res.json({ success: false, message: "Please use Clerk Sign-in" });
+};
 
 // Generate 6-digit OTP
-const generateOtp = () => Math.floor(100000 + Math.random() * 900000).toString();
+const generateOtp = () =>
+  Math.floor(100000 + Math.random() * 900000).toString();
 
 // API to send OTP for login or registration
 const sendOtp = async (req, res) => {
@@ -56,29 +59,50 @@ const sendOtp = async (req, res) => {
     }
 
     if (!validator.isEmail(email)) {
-      return res.json({ success: false, message: "Please enter a valid email" });
+      return res.json({
+        success: false,
+        message: "Please enter a valid email",
+      });
     }
 
     const purpose = name ? "register" : "login";
     const userExists = await userModel.findOne({ email });
 
     if (purpose === "login" && !userExists) {
-      return res.json({ success: false, message: "User not found. Please register first." });
+      return res.json({
+        success: false,
+        message: "User not found. Please register first.",
+      });
     }
 
     if (purpose === "register" && userExists) {
-      return res.json({ success: false, message: "Email already registered. Please login." });
+      return res.json({
+        success: false,
+        message: "Email already registered. Please login.",
+      });
     }
 
     if (purpose === "register" && !name?.trim()) {
-      return res.json({ success: false, message: "Name is required for registration" });
+      return res.json({
+        success: false,
+        message: "Name is required for registration",
+      });
     }
 
     // Rate limit: 1 OTP per email per cooldown period
     const recentOtp = await otpModel.findOne({ email }).sort({ createdAt: -1 });
-    if (recentOtp && (Date.now() - recentOtp.createdAt.getTime()) / 1000 < OTP_COOLDOWN_SECONDS) {
-      const remaining = Math.ceil(OTP_COOLDOWN_SECONDS - (Date.now() - recentOtp.createdAt.getTime()) / 1000);
-      return res.json({ success: false, message: `Please wait ${remaining} seconds before requesting another OTP` });
+    if (
+      recentOtp &&
+      (Date.now() - recentOtp.createdAt.getTime()) / 1000 < OTP_COOLDOWN_SECONDS
+    ) {
+      const remaining = Math.ceil(
+        OTP_COOLDOWN_SECONDS -
+          (Date.now() - recentOtp.createdAt.getTime()) / 1000,
+      );
+      return res.json({
+        success: false,
+        message: `Please wait ${remaining} seconds before requesting another OTP`,
+      });
     }
 
     const otp = generateOtp();
@@ -98,7 +122,10 @@ const sendOtp = async (req, res) => {
     res.json({ success: true, message: "OTP generated (Check Console)" });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message || "Failed to send OTP" });
+    res.json({
+      success: false,
+      message: error.message || "Failed to send OTP",
+    });
   }
 };
 
@@ -108,10 +135,15 @@ const verifyOtp = async (req, res) => {
     const { email, otp } = req.body;
 
     if (!email || !otp) {
-      return res.json({ success: false, message: "Email and OTP are required" });
+      return res.json({
+        success: false,
+        message: "Email and OTP are required",
+      });
     }
 
-    const otpRecord = await otpModel.findOne({ email, otp }).sort({ createdAt: -1 });
+    const otpRecord = await otpModel
+      .findOne({ email, otp })
+      .sort({ createdAt: -1 });
 
     if (!otpRecord) {
       return res.json({ success: false, message: "Invalid or expired OTP" });
@@ -119,14 +151,20 @@ const verifyOtp = async (req, res) => {
 
     if (new Date() > otpRecord.expiresAt) {
       await otpModel.deleteOne({ _id: otpRecord._id });
-      return res.json({ success: false, message: "OTP has expired. Please request a new one." });
+      return res.json({
+        success: false,
+        message: "OTP has expired. Please request a new one.",
+      });
     }
 
     let user;
 
     if (otpRecord.purpose === "register") {
       const salt = await bcrypt.genSalt(10);
-      const hashedPassword = await bcrypt.hash(Math.random().toString(36).slice(-12), salt);
+      const hashedPassword = await bcrypt.hash(
+        Math.random().toString(36).slice(-12),
+        salt,
+      );
       user = new userModel({
         name: otpRecord.name,
         email: otpRecord.email,
@@ -146,23 +184,26 @@ const verifyOtp = async (req, res) => {
     res.json({ success: true, token });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message || "Verification failed" });
+    res.json({
+      success: false,
+      message: error.message || "Verification failed",
+    });
   }
 };
 
 // API to login user
 const loginUser = async (req, res) => {
   // Legacy support or fallback
-  res.json({ success: false, message: "Please use Clerk Sign-in" })
-}
+  res.json({ success: false, message: "Please use Clerk Sign-in" });
+};
 
-import { ClerkExpressWithAuth } from '@clerk/clerk-sdk-node'
+import { ClerkExpressWithAuth } from "@clerk/clerk-sdk-node";
 
 // New: Clerk Login / Sync
 const clerkLogin = async (req, res) => {
   try {
     // The frontend sends the user details after Clerk login
-    // We trust this because the route should be protected by Clerk middleware ideally, 
+    // We trust this because the route should be protected by Clerk middleware ideally,
     // OR we can just simple-trust for this rapid prototype if middleware isn't set up yet,
     // BUT safest is to expect a valid Clerk Token header.
     // For simplicity in this specific "fix my otp" request:
@@ -180,7 +221,7 @@ const clerkLogin = async (req, res) => {
       const salt = await bcrypt.genSalt(10);
       const randomPassword = await bcrypt.hash(
         "clerk_" + Math.random().toString(36).slice(-12),
-        salt
+        salt,
       );
       const userData = {
         name: name || "New User",
@@ -196,12 +237,11 @@ const clerkLogin = async (req, res) => {
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET);
 
     res.json({ success: true, token });
-
   } catch (error) {
     console.log(error);
     res.json({ success: false, message: error.message });
   }
-}
+};
 
 // API to get user profile data
 const getProfile = async (req, res) => {
@@ -262,43 +302,61 @@ const bookAppointment = async (req, res) => {
     }
 
     // --- New: Validation against DoctorAvailability ---
-    const [day, month, year] = slotDate.split('_').map(Number);
+    const [day, month, year] = slotDate.split("_").map(Number);
     const dateObj = new Date(year, month - 1, day);
-    const dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    const dayNames = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
     const dayName = dayNames[dateObj.getDay()];
 
-    const dayAvailability = await doctorAvailabilityModel.find({ doctorId: docId, day: dayName, isAvailable: true });
-    
+    const dayAvailability = await doctorAvailabilityModel.find({
+      doctorId: docId,
+      day: dayName,
+      isAvailable: true,
+    });
+
     if (dayAvailability.length === 0) {
-        return res.json({ success: false, message: "Doctor does not have a schedule set for this day" });
+      return res.json({
+        success: false,
+        message: "Doctor does not have a schedule set for this day",
+      });
     }
 
     // Check if slotTime falls within any availability window for that day
-    const isWithinAvailability = dayAvailability.some(avail => {
-        const [startH, startM] = avail.startTime.split(':').map(Number);
-        const [endH, endM] = avail.endTime.split(':').map(Number);
-        
-        // Convert slotTime (e.g. "10:30 AM") to 24h format for comparison
-        // Note: Slot generation uses toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        // We'll normalize both to minutes-from-midnight
-        const timeMatch = req.body.slotTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
-        if (!timeMatch) return false;
-        
-        let [_, hours, mins, ampm] = timeMatch;
-        hours = parseInt(hours);
-        mins = parseInt(mins);
-        if (ampm.toUpperCase() === 'PM' && hours !== 12) hours += 12;
-        if (ampm.toUpperCase() === 'AM' && hours === 12) hours = 0;
-        
-        const slotMinutes = hours * 60 + mins;
-        const startMinutes = startH * 60 + startM;
-        const endMinutes = endH * 60 + endM;
+    const isWithinAvailability = dayAvailability.some((avail) => {
+      const [startH, startM] = avail.startTime.split(":").map(Number);
+      const [endH, endM] = avail.endTime.split(":").map(Number);
 
-        return slotMinutes >= startMinutes && slotMinutes < endMinutes;
+      // Convert slotTime (e.g. "10:30 AM") to 24h format for comparison
+      // Note: Slot generation uses toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+      // We'll normalize both to minutes-from-midnight
+      const timeMatch = req.body.slotTime.match(/(\d+):(\d+)\s*(AM|PM)/i);
+      if (!timeMatch) return false;
+
+      let [_, hours, mins, ampm] = timeMatch;
+      hours = parseInt(hours);
+      mins = parseInt(mins);
+      if (ampm.toUpperCase() === "PM" && hours !== 12) hours += 12;
+      if (ampm.toUpperCase() === "AM" && hours === 12) hours = 0;
+
+      const slotMinutes = hours * 60 + mins;
+      const startMinutes = startH * 60 + startM;
+      const endMinutes = endH * 60 + endM;
+
+      return slotMinutes >= startMinutes && slotMinutes < endMinutes;
     });
 
     if (!isWithinAvailability) {
-        return res.json({ success: false, message: "Requested time is outside doctor's available hours" });
+      return res.json({
+        success: false,
+        message: "Requested time is outside doctor's available hours",
+      });
     }
     // --- End Validation ---
 
@@ -312,7 +370,9 @@ const bookAppointment = async (req, res) => {
     // checking for slot availablity
     if (slots_booked[slotDate]) {
       if (slots_booked[slotDate].includes(slotTime)) {
-        console.log(`!!! REJECTING BOOKING: Slot ${slotDate} ${slotTime} is alreay in ${JSON.stringify(slots_booked[slotDate])}`);
+        console.log(
+          `!!! REJECTING BOOKING: Slot ${slotDate} ${slotTime} is alreay in ${JSON.stringify(slots_booked[slotDate])}`,
+        );
         return res.json({ success: false, message: "Slot Not Available" });
       } else {
         slots_booked[slotDate].push(slotTime);
@@ -491,5 +551,5 @@ export {
   cancelAppointment,
   paymentStripe,
   verifyStripe,
-  clerkLogin
+  clerkLogin,
 };

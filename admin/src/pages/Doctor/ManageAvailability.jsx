@@ -48,7 +48,7 @@ const ManageAvailability = () => {
       const { data } = await axios[method](
         url,
         { day, startTime, endTime, slotDuration, isAvailable },
-        { headers: { dtoken: dToken } }
+        { headers: { dToken } }
       )
       if (data.success) {
         toast.success(data.message)
@@ -84,7 +84,7 @@ const ManageAvailability = () => {
   const deleteAvailability = async (id) => {
     try {
       const { data } = await axios.delete(`${backendUrl}/api/availability/${id}`, {
-        headers: { dtoken: dToken }
+        headers: { dToken }
       })
       if (data.success) {
         toast.success(data.message)

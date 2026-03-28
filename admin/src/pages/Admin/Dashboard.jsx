@@ -38,9 +38,9 @@ const Dashboard = () => {
           <AppointmentsChart data={analyticsData.monthlyStats} />
         )}
         {analyticsData && (
-          <AppointmentStatusChart 
-            completed={analyticsData.completedAppointments} 
-            cancelled={analyticsData.cancelledAppointments} 
+          <AppointmentStatusChart
+            completed={analyticsData.completedAppointments}
+            cancelled={analyticsData.cancelledAppointments}
           />
         )}
       </div>
@@ -63,7 +63,7 @@ const Dashboard = () => {
                 <span className={`px-2 py-1 border rounded-full text-[10px] font-medium ${statusColors[item.status]}`}>
                   {item.status}
                 </span>
-                
+
                 {item.status === "Pending" && (
                   <div className='flex gap-1'>
                     <button onClick={() => updateAppointmentStatus(item._id, 'Confirmed')} className='text-[10px] bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition-all'>Confirm</button>

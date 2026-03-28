@@ -81,13 +81,12 @@ const MyAppointments = () => {
                         </div>
                         <div></div>
                         <div className='flex flex-col gap-2 justify-end text-sm text-center'>
-                            <span className={`py-1 px-4 border rounded-full text-xs font-medium self-center sm:self-end sm:min-w-48 ${
-                                item.status === "Pending" ? "bg-yellow-50 text-yellow-600 border-yellow-200" :
+                            <span className={`py-1 px-4 border rounded-full text-xs font-medium self-center sm:self-end sm:min-w-48 ${item.status === "Pending" ? "bg-yellow-50 text-yellow-600 border-yellow-200" :
                                 item.status === "Confirmed" ? "bg-green-50 text-green-600 border-green-200" :
-                                item.status === "Consultation In Progress" ? "bg-blue-50 text-blue-600 border-blue-200" :
-                                item.status === "Completed" ? "bg-emerald-50 text-emerald-600 border-emerald-200" :
-                                "bg-red-50 text-red-600 border-red-200"
-                            }`}>
+                                    item.status === "Consultation In Progress" ? "bg-blue-50 text-blue-600 border-blue-200" :
+                                        item.status === "Completed" ? "bg-emerald-50 text-emerald-600 border-emerald-200" :
+                                            "bg-red-50 text-red-600 border-red-200"
+                                }`}>
                                 Appointment Status: {item.status}
                             </span>
 
@@ -98,8 +97,8 @@ const MyAppointments = () => {
                             {item.status === "Completed" && (
                                 <div className='flex flex-col gap-2'>
                                     {!item.isReviewed ? (
-                                        <button 
-                                            onClick={() => setReviewModal({ show: true, doctorId: item.docId, appointmentId: item._id })} 
+                                        <button
+                                            onClick={() => setReviewModal({ show: true, doctorId: item.docId, appointmentId: item._id })}
                                             className='sm:min-w-48 py-2 border border-primary rounded text-primary hover:bg-primary hover:text-white transition-all duration-300'
                                         >
                                             Leave Review
@@ -117,11 +116,11 @@ const MyAppointments = () => {
             </div>
 
             {reviewModal.show && (
-                <ReviewForm 
-                    doctorId={reviewModal.doctorId} 
-                    appointmentId={reviewModal.appointmentId} 
-                    onReviewSubmit={getUserAppointments} 
-                    onClose={() => setReviewModal({ show: false, doctorId: null, appointmentId: null })} 
+                <ReviewForm
+                    doctorId={reviewModal.doctorId}
+                    appointmentId={reviewModal.appointmentId}
+                    onReviewSubmit={getUserAppointments}
+                    onClose={() => setReviewModal({ show: false, doctorId: null, appointmentId: null })}
                 />
             )}
         </div>

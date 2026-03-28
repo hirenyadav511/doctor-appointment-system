@@ -47,7 +47,8 @@ app.post("/create-payment-intent", async (req, res) => {
       return res.status(400).json({ error: "amount is required" });
     }
 
-    const stripeSecret = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET;
+    const stripeSecret =
+      process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SECRET;
     if (!stripeSecret) {
       return res.status(500).json({ error: "STRIPE_SECRET_KEY is not set" });
     }
@@ -67,8 +68,10 @@ app.post("/create-payment-intent", async (req, res) => {
   }
 });
 
-app.get('/', (req, res) => {
-  res.send('API Working')
-})
+app.get("/", (req, res) => {
+  res.send("API Working");
+});
 
-app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+app.listen(PORT, () =>
+  console.log(`Server running on http://localhost:${PORT}`),
+);

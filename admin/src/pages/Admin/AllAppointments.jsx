@@ -40,7 +40,7 @@ const AllAppointments = () => {
         </div>
         {appointments.map((item, index) => (
           <div className='flex flex-wrap justify-between max-sm:gap-2 sm:grid sm:grid-cols-[0.5fr_3fr_1fr_3fr_3fr_1fr_2fr] items-center text-gray-500 py-3 px-6 border-b hover:bg-gray-50' key={index}>
-            <p className='max-sm:hidden'>{index+1}</p>
+            <p className='max-sm:hidden'>{index + 1}</p>
             <div className='flex items-center gap-2'>
               <img src={item.userData.image} className='w-8 rounded-full' alt="" /> <p>{item.userData.name}</p>
             </div>
@@ -54,7 +54,7 @@ const AllAppointments = () => {
               <span className={`px-2 py-1 border rounded-full text-[10px] font-medium ${statusColors[item.status]}`}>
                 {item.status}
               </span>
-              
+
               {item.status === "Pending" && (
                 <div className='flex gap-1'>
                   <button onClick={() => updateAppointmentStatus(item._id, 'Confirmed')} className='text-[10px] bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition-all'>Confirm</button>
