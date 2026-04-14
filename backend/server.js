@@ -24,7 +24,14 @@ connectCloudinary();
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors({
+  origin: [
+    "https://doctor-appointment-system-bpux.vercel.app",
+    "https://doctor-appointment-system-woad-eight.vercel.app"
+  ],
+  credentials: true
+}));
+app.options("*", cors());
 
 // API routes
 app.use("/api/admin", adminRouter);
