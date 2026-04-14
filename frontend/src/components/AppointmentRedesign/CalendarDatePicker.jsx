@@ -22,6 +22,7 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
                 <h3 className="text-lg font-bold text-gray-800 dark:text-gray-100">{monthName} {year}</h3>
                 <div className="flex gap-2">
                     <button 
+                        type="button"
                         onClick={() => changeMonth(-1)}
                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
                     >
@@ -30,6 +31,7 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
                         </svg>
                     </button>
                     <button 
+                        type="button"
                         onClick={() => changeMonth(1)}
                         className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors border border-gray-200 dark:border-gray-700"
                     >
@@ -73,26 +75,21 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
             const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
             const isToday = date.toDateString() === today.toDateString();
             
-            // For now, let's assume availability is handled by existing docSlots logic
-            // But we can highlight dates that are within the next 7 days in this simple version
-            const isWithinRange = date >= today && date <= new Date(new Date().setDate(today.getDate() + 7));
             const isPast = date < today;
 
             cells.push(
                 <div key={d} className="p-1">
                     <button
+                        type="button"
                         disabled={isPast}
                         onClick={() => onDateSelect(date)}
                         className={`w-full aspect-square flex flex-col items-center justify-center rounded-xl text-sm transition-all duration-300 relative
-                            ${isPast ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' : 'hover:bg-primary/10 hover:text-primary'}
-                            ${isSelected ? 'bg-primary text-white hover:bg-primary hover:text-white shadow-lg scale-105 z-10' : 'text-gray-700 dark:text-gray-300'}
-                            ${isToday && !isSelected ? 'border border-primary/50' : ''}
+                            ${isPast ? 'text-gray-300 dark:text-gray-600 cursor-not-allowed' : 'hover:bg-[#0FB9B1]/10 hover:text-[#0FB9B1]'}
+                            ${isSelected ? 'bg-[#0FB9B1] text-white hover:bg-[#0FB9B1] hover:text-white shadow-lg scale-105 z-10' : 'text-gray-700 dark:text-gray-300'}
+                            ${isToday && !isSelected ? 'border border-[#0FB9B1]/50' : ''}
                         `}
                     >
                         {d}
-                        {isWithinRange && !isSelected && !isPast && (
-                            <span className="absolute bottom-1 w-1 h-1 bg-green-500 rounded-full"></span>
-                        )}
                     </button>
                 </div>
             );
@@ -102,7 +99,7 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
     };
 
     return (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm animate-fade-in">
+        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm">
             {renderHeader()}
             {renderDaysOfWeek()}
             {renderCells()}
@@ -110,4 +107,4 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
     );
 };
 
-export default CalendarDatePicker
+export default CalendarDatePicker;

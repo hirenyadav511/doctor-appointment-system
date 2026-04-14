@@ -14,8 +14,15 @@ function Payment() {
       <div className="p-6 text-gray-600 dark:text-gray-400">
         <h1 className="text-xl font-semibold mb-2">Make a Payment</h1>
         <p>
-          Stripe is not configured. Add <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">VITE_STRIPE_PUBLISHABLE_KEY</code> to{" "}
-          <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">frontend/.env</code> to enable card payments.
+          Stripe is not configured. Add{" "}
+          <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">
+            VITE_STRIPE_PUBLISHABLE_KEY
+          </code>{" "}
+          to{" "}
+          <code className="bg-gray-100 dark:bg-gray-800 px-1 rounded">
+            frontend/.env
+          </code>{" "}
+          to enable card payments.
         </p>
       </div>
     );

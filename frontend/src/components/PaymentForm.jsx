@@ -7,11 +7,12 @@ function PaymentForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const backendUrl = import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
+    const backendUrl =
+      import.meta.env.VITE_BACKEND_URL || "http://localhost:5000";
     const res = await fetch(backendUrl + "/create-payment-intent", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ amount: 5000 }) // ₹50
+      body: JSON.stringify({ amount: 5000 }), // ₹50
     });
 
     const data = await res.json();
@@ -29,7 +30,9 @@ function PaymentForm() {
   return (
     <form onSubmit={handleSubmit}>
       <CardElement />
-      <button type="submit" disabled={!stripe}>Pay</button>
+      <button type="submit" disabled={!stripe}>
+        Pay
+      </button>
     </form>
   );
 }

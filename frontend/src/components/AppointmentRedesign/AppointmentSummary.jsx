@@ -6,13 +6,13 @@ const AppointmentSummary = ({ docInfo, selectedDate, selectedTime, currencySymbo
     return (
         <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm sticky top-10 animate-fade-in">
             <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-primary rounded-full"></span>
+                <span className="w-1.5 h-6 bg-[#0FB9B1] rounded-full"></span>
                 Appointment Summary
             </h3>
             
             <div className="space-y-4">
                 <div className="flex items-start gap-3">
-                    <img src={docInfo.image} alt={docInfo.name} className="w-12 h-12 rounded-lg bg-primary/10 object-cover" />
+                    <img src={docInfo.image} alt={docInfo.name} className="w-12 h-12 rounded-lg bg-[#0FB9B1]/10 object-cover" />
                     <div>
                         <p className="text-sm text-gray-500 dark:text-gray-400">Doctor</p>
                         <p className="font-medium text-gray-800 dark:text-gray-200">{docInfo.name}</p>

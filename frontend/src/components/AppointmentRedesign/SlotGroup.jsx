@@ -15,9 +15,9 @@ const SlotGroup = ({ title, slots, selectedTime, onSelectSlot, icon }) => {
                     const isBooked = !item.available;
                     const isFewLeft = item.availabilityStatus === 'few';
 
-                    let statusClasses = "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-primary";
+                    let statusClasses = "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-[#0FB9B1]";
                     if (isSelected) {
-                        statusClasses = "bg-primary text-white border-primary shadow-md scale-105";
+                        statusClasses = "bg-[#0FB9B1] text-white border-[#0FB9B1] shadow-md scale-105";
                     } else if (isBooked) {
                         statusClasses = "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 border-gray-100 dark:border-gray-700 cursor-not-allowed opacity-60";
                     } else if (isFewLeft) {

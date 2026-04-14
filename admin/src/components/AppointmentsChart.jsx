@@ -25,7 +25,7 @@ const AppointmentsChart = ({ data }) => {
             contentStyle={{ borderRadius: '8px', border: 'none', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }}
           />
           <Legend verticalAlign="top" align="right" iconType="circle" />
-          <Bar dataKey="appointments" fill="#3B82F6" radius={[4, 4, 0, 0]} name="Appointments" />
+          <Bar dataKey="appointments" fill="#0FB9B1" radius={[4, 4, 0, 0]} name="Appointments" />
         </BarChart>
       </ResponsiveContainer>
     </div>

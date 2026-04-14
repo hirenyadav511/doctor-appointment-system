@@ -1,87 +1,101 @@
-import React, { useContext, useEffect } from 'react'
-import { assets } from '../../assets/assets'
-import { AdminContext } from '../../context/AdminContext'
-import { AppContext } from '../../context/AppContext'
-import AdminAnalytics from '../../components/AdminAnalytics'
-import AppointmentsChart from '../../components/AppointmentsChart'
-import AppointmentStatusChart from '../../components/AppointmentStatusChart'
+import React, { useContext, useEffect } from "react";
+import { AdminContext } from "../../context/AdminContext";
+import { assets } from "../../assets/assets";
+import { AppContext } from "../../context/AppContext";
+import AdminAnalytics from "../../components/AdminAnalytics";
+import AppointmentsChart from "../../components/AppointmentsChart";
+import AppointmentStatusChart from "../../components/AppointmentStatusChart";
 
 const Dashboard = () => {
-
-  const { aToken, getDashData, cancelAppointment, dashData, analyticsData, getAnalyticsData, updateAppointmentStatus } = useContext(AdminContext)
-  const { slotDateFormat, currencySymbol } = useContext(AppContext)
+  const {
+    aToken,
+    getDashData,
+    cancelAppointment,
+    dashData,
+    analyticsData,
+    getAnalyticsData,
+  } = useContext(AdminContext);
+  const { slotDateFormat, currency } = useContext(AppContext);
 
   useEffect(() => {
     if (aToken) {
-      getDashData()
-      getAnalyticsData()
+      getDashData();
+      getAnalyticsData();
     }
-  }, [aToken])
+  }, [aToken]);
 
-  const statusColors = {
-    "Pending": "bg-yellow-100 text-yellow-800 border-yellow-200",
-    "Confirmed": "bg-green-100 text-green-800 border-green-200",
-    "Consultation In Progress": "bg-blue-100 text-blue-800 border-blue-200",
-    "Completed": "bg-emerald-100 text-emerald-800 border-emerald-200",
-    "Cancelled": "bg-red-100 text-red-800 border-red-200"
-  }
-
-  return dashData && (
-    <div className='m-5'>
-
-      {analyticsData && (
-        <AdminAnalytics analytics={analyticsData} currency={currencySymbol} />
-      )}
-
-      <div className='grid grid-cols-1 lg:grid-cols-2 gap-6 mb-10'>
-        {analyticsData && analyticsData.monthlyStats && (
-          <AppointmentsChart data={analyticsData.monthlyStats} />
-        )}
+  return (
+    dashData && (
+      <div className="m-5">
+        {/* Analytics Summary & fixed Charts */}
         {analyticsData && (
-          <AppointmentStatusChart
-            completed={analyticsData.completedAppointments}
-            cancelled={analyticsData.cancelledAppointments}
-          />
-        )}
-      </div>
+          <div className="mb-8 flex flex-col gap-8 text-gray-800">
+            <AdminAnalytics analytics={analyticsData} currency={currency} />
 
-      <div className='bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700'>
-        <div className='flex items-center gap-2.5 px-6 py-5 rounded-t-xl border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50'>
-          <img src={assets.list_icon} className="dark:invert w-5" alt="" />
-          <p className='font-semibold text-lg text-gray-800 dark:text-white'>Latest Bookings</p>
-        </div>
-
-        <div className='divide-y divide-gray-100 dark:divide-gray-700'>
-          {dashData.latestAppointments.slice(0, 5).map((item, index) => (
-            <div className='flex items-center px-6 py-4 gap-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors' key={index}>
-              <img className='rounded-full w-12 h-12 object-cover border dark:border-gray-600' src={item.docData.image} alt="" />
-              <div className='flex-1'>
-                <p className='text-gray-800 dark:text-white font-medium text-base'>{item.docData.name}</p>
-                <p className='text-gray-500 dark:text-gray-400 text-sm'>Booking on {slotDateFormat(item.slotDate)}</p>
+            <div className="flex flex-col lg:flex-row gap-8">
+              <div className="flex-1 animate-slide-up">
+                {/* Fixed: Use monthlyStats instead of monthlyData */}
+                <AppointmentsChart data={analyticsData.monthlyStats} />
               </div>
-              <div className='flex items-center gap-2'>
-                <span className={`px-2 py-1 border rounded-full text-[10px] font-medium ${statusColors[item.status]}`}>
-                  {item.status}
-                </span>
-
-                {item.status === "Pending" && (
-                  <div className='flex gap-1'>
-                    <button onClick={() => updateAppointmentStatus(item._id, 'Confirmed')} className='text-[10px] bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600 transition-all'>Confirm</button>
-                    <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[10px] bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-all'>Cancel</button>
-                  </div>
-                )}
-
-                {item.status === "Confirmed" && (
-                  <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[10px] bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600 transition-all'>Cancel</button>
-                )}
+              <div className="lg:w-1/3 animate-slide-up">
+                <AppointmentStatusChart
+                  completed={analyticsData.completedAppointments}
+                  cancelled={analyticsData.cancelledAppointments}
+                />
               </div>
             </div>
-          ))}
+          </div>
+        )}
+
+        {/* Latest Bookings Section */}
+        <div className="bg-white rounded-lg border shadow-sm">
+          <div className="flex items-center gap-2.5 px-6 py-5">
+            <img className="w-5" src={assets.list_icon} alt="" />
+            <p className="font-bold text-lg text-gray-800">Latest Bookings</p>
+          </div>
+
+          <div className="pt-2 border-t">
+            {dashData.latestAppointments.map((item, index) => (
+              <div
+                className="flex items-center px-6 py-4 gap-4 hover:bg-gray-50 transition-colors"
+                key={index}
+              >
+                <img
+                  className="rounded-full w-12 h-12 border-2 border-slate-100 object-cover"
+                  src={item.docData.image}
+                  alt=""
+                />
+                <div className="flex-1 text-sm">
+                  <p className="text-gray-900 font-bold">{item.docData.name}</p>
+                  <p className="text-gray-500 font-medium">
+                    Scheduled on {slotDateFormat(item.slotDate)}
+                  </p>
+                </div>
+                <div className="flex items-center gap-3">
+                  {item.cancelled ? (
+                    <span className="text-red-500 bg-red-50 px-3 py-1 rounded-full text-xs font-bold">
+                      Cancelled
+                    </span>
+                  ) : item.isCompleted ? (
+                    <span className="text-green-600 bg-green-50 px-3 py-1 rounded-full text-xs font-bold">
+                      Completed
+                    </span>
+                  ) : (
+                    <img
+                      onClick={() => cancelAppointment(item._id)}
+                      className="w-9 h-9 p-2 hover:bg-red-50 rounded-full cursor-pointer transition-all"
+                      src={assets.cancel_icon}
+                      alt="Cancel"
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
+    )
+  );
+};
 
-    </div>
-  )
-}
-
-export default Dashboard
+export default Dashboard;

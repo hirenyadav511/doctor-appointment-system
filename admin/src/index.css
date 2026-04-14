@@ -3,20 +3,62 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #0FB9B1;
+  --primary-hover: #0d9a93;
+  --bg-soft: #f0f9fa;
+  --text-main: #2d3436;
+  --text-light: #636e72;
+  --card-bg: #ffffff;
+  --white: #ffffff;
+  --border-color: #e2e8f0;
+  --shadow-sm: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
 @layer base {
-    body {
-        @apply bg-[#F8F9FD] text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 ease-in-out font-outfit;
-    }
+  body {
+    @apply bg-[#f0f9fa] text-gray-900 dark:bg-gray-900 dark:text-gray-100 transition-colors duration-300 ease-in-out font-outfit;
+  }
+}
+
+/* Force primary color to match logo across admin portal */
+.bg-primary {
+  background-color: #0FB9B1 !important;
+}
+
+.text-primary, .hover\:text-primary:hover {
+  color: #0FB9B1 !important;
+}
+
+.border-primary {
+  border-color: #0FB9B1 !important;
+}
+
+.accent-primary {
+  accent-color: #0FB9B1 !important;
 }
 
 ::-webkit-scrollbar {
-    @apply w-1.5
+  @apply w-1.5
 }
 
 ::-webkit-scrollbar-track {
-    @apply bg-transparent
+  @apply bg-transparent
 }
 
 ::-webkit-scrollbar-thumb {
-    @apply bg-gray-300 dark:bg-gray-700 rounded-full
+  @apply bg-gray-300 dark:bg-gray-700 rounded-full
+}
+
+.dashboard-card {
+  @apply bg-white p-6 rounded-2xl border border-slate-100 shadow-sm transition-all hover:shadow-md;
+}
+
+.admin-btn {
+  @apply px-6 py-2 rounded-full font-semibold transition-all duration-300;
+}
+
+.admin-btn-primary {
+  @apply bg-[#0FB9B1] text-white hover:bg-[#0d9a93] hover:shadow-lg;
 }

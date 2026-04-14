@@ -1,0 +1,130 @@
+.appointments-wrapper {
+  background-color: var(--secondary);
+  padding: 60px 0;
+  min-height: 100vh;
+}
+
+.appointments-container {
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.appointments-title {
+  font-size: 24px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 30px;
+  border-bottom: 1px solid var(--border-color);
+  padding-bottom: 15px;
+}
+
+.appointment-item {
+  background-color: var(--white);
+  padding: 25px;
+  border-radius: 12px;
+  margin-bottom: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  gap: 25px;
+  align-items: center;
+  border: 1px solid transparent;
+  transition: all 0.3s ease;
+}
+
+.appointment-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--primary);
+}
+
+.doc-img-thumb {
+  width: 120px;
+  height: 120px;
+  border-radius: 8px;
+  object-fit: cover;
+  background-color: var(--secondary);
+}
+
+.appointment-details {
+  flex: 1;
+}
+
+.doc-name {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 5px;
+}
+
+.doc-spec {
+  font-size: 14px;
+  color: var(--primary);
+  font-weight: 700;
+  margin-bottom: 15px;
+}
+
+.app-meta {
+  font-size: 13px;
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.appointment-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  min-width: 200px;
+}
+
+.status-badge {
+  padding: 8px 15px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 700;
+  text-align: center;
+}
+
+.status-pending { background-color: #fff9db; color: #f08c00; }
+.status-confirmed { background-color: #ebfbee; color: #40c057; }
+.status-cancelled { background-color: #fff5f5; color: #fa5252; }
+.status-completed { background-color: #f3f0ff; color: #7950f2; }
+
+.app-btn {
+  padding: 10px;
+  border-radius: 8px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border: 1px solid var(--border-color);
+  background-color: var(--white);
+  color: var(--text-light);
+}
+
+.btn-pay {
+  background-color: var(--primary);
+  color: var(--white);
+  border: none;
+}
+
+.btn-pay:hover {
+  background-color: var(--primary-hover);
+}
+
+.btn-cancel:hover {
+  background-color: #fa5252;
+  color: var(--white);
+  border-color: #fa5252;
+}
+
+@media (max-width: 768px) {
+  .appointment-item {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .appointment-actions {
+    width: 100%;
+  }
+}

@@ -19,101 +19,106 @@ const DoctorDashboard = () => {
     }
   }, [dToken])
 
+  // Updated status colors for consistency
   const statusColors = {
-    "Pending": "bg-yellow-100 text-yellow-800 border-yellow-200",
-    "Confirmed": "bg-green-100 text-green-800 border-green-200",
-    "Consultation In Progress": "bg-blue-100 text-blue-800 border-blue-200",
-    "Completed": "bg-emerald-100 text-emerald-800 border-emerald-200",
-    "Cancelled": "bg-red-100 text-red-800 border-red-200"
+    "Pending": "bg-yellow-50 text-yellow-600 border-yellow-100",
+    "Confirmed": "bg-emerald-50 text-emerald-600 border-emerald-100",
+    "Consultation In Progress": "bg-cyan-50 text-cyan-600 border-cyan-100",
+    "Completed": "bg-green-50 text-green-700 border-green-100",
+    "Cancelled": "bg-red-50 text-red-600 border-red-100"
   }
 
   return dashData && (
     <div className='m-5'>
 
-      <div className='flex flex-wrap gap-4'>
-        <div className='flex-1 flex items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-w-52 cursor-pointer hover:shadow-md transition-all'>
-          <div className="p-3 bg-blue-50 dark:bg-blue-900/30 rounded-full">
+      {/* Stats Section with Teal/Healthcare Theme */}
+      <div className='flex flex-wrap gap-6 animate-slide-up'>
+        <div className='flex-1 flex items-center gap-4 bg-white p-8 rounded-2xl shadow-sm border border-slate-50 min-w-56 hover:shadow-md transition-all'>
+          <div className="p-4 bg-[#f0f9fa] rounded-2xl">
             <img className='w-10' src={assets.earning_icon} alt="" />
           </div>
           <div>
-            <p className='text-3xl font-bold text-gray-800 dark:text-white'>{currency} {dashData.earnings}</p>
-            <p className='text-gray-500 dark:text-gray-400 font-medium mt-1'>Earnings</p>
+            <p className='text-3xl font-extrabold text-gray-900'>{currency} {dashData.earnings}</p>
+            <p className='text-gray-400 font-bold text-sm uppercase tracking-wider mt-1'>Earnings</p>
           </div>
         </div>
 
-        <div className='flex-1 flex items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-w-52 cursor-pointer hover:shadow-md transition-all'>
-          <div className="p-3 bg-green-50 dark:bg-green-900/30 rounded-full">
+        <div className='flex-1 flex items-center gap-4 bg-white p-8 rounded-2xl shadow-sm border border-slate-50 min-w-56 hover:shadow-md transition-all'>
+          <div className="p-4 bg-[#f0f9fa] rounded-2xl">
             <img className='w-10' src={assets.appointments_icon} alt="" />
           </div>
           <div>
-            <p className='text-3xl font-bold text-gray-800 dark:text-white'>{dashData.appointments}</p>
-            <p className='text-gray-500 dark:text-gray-400 font-medium mt-1'>Appointments</p>
+            <p className='text-3xl font-extrabold text-gray-900'>{dashData.appointments}</p>
+            <p className='text-gray-400 font-bold text-sm uppercase tracking-wider mt-1'>Appointments</p>
           </div>
         </div>
 
-        <div className='flex-1 flex items-center gap-4 bg-white dark:bg-gray-800 p-6 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700 min-w-52 cursor-pointer hover:shadow-md transition-all'>
-          <div className="p-3 bg-indigo-50 dark:bg-indigo-900/30 rounded-full">
+        <div className='flex-1 flex items-center gap-4 bg-white p-8 rounded-2xl shadow-sm border border-slate-50 min-w-56 hover:shadow-md transition-all'>
+          <div className="p-4 bg-[#f0f9fa] rounded-2xl">
             <img className='w-10' src={assets.patients_icon} alt="" />
           </div>
           <div>
-            <p className='text-3xl font-bold text-gray-800 dark:text-white'>{dashData.patients}</p>
-            <p className='text-gray-500 dark:text-gray-400 font-medium mt-1'>Patients</p>
+            <p className='text-3xl font-extrabold text-gray-900'>{dashData.patients}</p>
+            <p className='text-gray-400 font-bold text-sm uppercase tracking-wider mt-1'>Patients</p>
           </div>
         </div>
       </div>
 
-      <div className='bg-white dark:bg-gray-800 mt-10 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700'>
-        <div className='flex items-center gap-2.5 px-6 py-5 rounded-t-xl border-b dark:border-gray-700 bg-gray-50 dark:bg-gray-900/50'>
-          <img src={assets.list_icon} className="dark:invert w-5" alt="" />
-          <p className='font-semibold text-lg text-gray-800 dark:text-white'>Latest Bookings</p>
+      {/* Latest Bookings Table style list */}
+      <div className='bg-white mt-10 rounded-2xl shadow-sm border border-slate-50 animate-slide-up'>
+        <div className='flex items-center gap-3 px-8 py-6 rounded-t-2xl border-b border-slate-50 bg-slate-50/30'>
+          <img src={assets.list_icon} className="w-5" alt="" />
+          <p className='font-extrabold text-lg text-gray-800'>Recent Appointments</p>
         </div>
 
-        <div className='divide-y divide-gray-100 dark:divide-gray-700'>
+        <div className='divide-y divide-slate-50'>
           {dashData.latestAppointments.slice(0, 5).map((item, index) => (
-            <div className='flex items-center px-6 py-4 gap-4 hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors' key={index}>
-              <img className='rounded-full w-12 h-12 object-cover border dark:border-gray-600' src={item.userData.image} alt="" />
+            <div className='flex items-center px-8 py-5 gap-5 hover:bg-gray-50 transition-colors' key={index}>
+              <img className='rounded-full w-14 h-14 object-cover border-2 border-slate-100 shadow-sm' src={item.userData.image} alt="" />
               <div className='flex-1'>
-                <p className='text-gray-800 dark:text-white font-medium text-base'>{item.userData.name}</p>
-                <p className='text-gray-500 dark:text-gray-400 text-sm'>Booking on {slotDateFormat(item.slotDate)}</p>
+                <p className='text-gray-900 font-bold text-base'>{item.userData.name}</p>
+                <p className='text-gray-400 font-medium text-sm'>Booking for {slotDateFormat(item.slotDate)}</p>
               </div>
-              <div className='flex flex-wrap items-center gap-2'>
-                <span className={`px-2 py-1 border rounded-full text-[10px] font-medium ${statusColors[item.status]}`}>
+              <div className='flex items-center gap-4'>
+                <span className={`px-4 py-1.5 border rounded-full text-[11px] font-bold uppercase tracking-wider ${statusColors[item.status]}`}>
                   {item.status}
                 </span>
 
-                {item.status === "Pending" && (
-                  <div className='flex gap-1'>
-                    <button onClick={() => updateAppointmentStatus(item._id, 'Confirmed')} className='text-[10px] bg-blue-500 text-white px-2 py-1 rounded hover:bg-blue-600'>Confirm</button>
-                    <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[10px] bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'>Cancel</button>
-                  </div>
-                )}
-
-                {item.status === "Confirmed" && (
-                  <div className='flex gap-1'>
-                    <button onClick={() => updateAppointmentStatus(item._id, 'Consultation In Progress')} className='text-[10px] bg-orange-500 text-white px-2 py-1 rounded hover:bg-orange-600'>Start Consultation</button>
-                    <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[10px] bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600'>Cancel</button>
-                  </div>
-                )}
-
-                {item.status === "Consultation In Progress" && (
-                  <button onClick={() => updateAppointmentStatus(item._id, 'Completed')} className='text-[10px] bg-green-500 text-white px-2 py-1 rounded hover:bg-green-600'>Mark Completed</button>
-                )}
-
-                {item.status === "Completed" && (
-                  <div className='flex flex-col gap-1 items-start'>
-                    {item.isMedicalRecordAdded ? (
-                      <p className='text-[10px] border border-green-500 bg-green-50 text-green-500 px-2 py-1 rounded'>
-                        Record Added
-                      </p>
-                    ) : (
-                      <button
-                        onClick={() => setSelectedAppointment(item)}
-                        className='text-[10px] border border-primary text-primary px-2 py-1 rounded hover:bg-primary hover:text-white transition-all'>
-                        Add Record
-                      </button>
+                <div className='flex gap-2'>
+                    {item.status === "Pending" && (
+                      <>
+                        <button onClick={() => updateAppointmentStatus(item._id, 'Confirmed')} className='text-[11px] bg-emerald-500 text-white px-4 py-2 rounded-full font-bold hover:bg-emerald-600 shadow-sm'>Confirm</button>
+                        <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[11px] bg-red-500 text-white px-4 py-2 rounded-full font-bold hover:bg-red-600 shadow-sm'>Cancel</button>
+                      </>
                     )}
-                  </div>
-                )}
+
+                    {item.status === "Confirmed" && (
+                      <>
+                        <button onClick={() => updateAppointmentStatus(item._id, 'Consultation In Progress')} className='text-[11px] bg-primary text-white px-4 py-2 rounded-full font-bold hover:bg-primary/90 shadow-sm'>Start Consultation</button>
+                        <button onClick={() => updateAppointmentStatus(item._id, 'Cancelled')} className='text-[11px] bg-red-500 text-white px-4 py-2 rounded-full font-bold hover:bg-red-600 shadow-sm'>Cancel</button>
+                      </>
+                    )}
+
+                    {item.status === "Consultation In Progress" && (
+                      <button onClick={() => updateAppointmentStatus(item._id, 'Completed')} className='text-[11px] bg-green-600 text-white px-4 py-2 rounded-full font-bold hover:bg-green-700 shadow-sm'>Mark Completed</button>
+                    )}
+
+                    {item.status === "Completed" && (
+                      <div className='flex items-center'>
+                        {item.isMedicalRecordAdded ? (
+                          <p className='text-[11px] border border-green-500 bg-green-50 text-green-600 px-4 py-1.5 rounded-full font-bold'>
+                            Medical Record Added
+                          </p>
+                        ) : (
+                          <button
+                            onClick={() => setSelectedAppointment(item)}
+                            className='text-[11px] border-2 border-primary text-primary px-4 py-1.5 rounded-full font-bold hover:bg-primary hover:text-white transition-all'>
+                            + Add Record
+                          </button>
+                        )}
+                      </div>
+                    )}
+                </div>
               </div>
             </div>
           ))}

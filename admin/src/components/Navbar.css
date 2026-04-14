@@ -1,0 +1,82 @@
+.admin-navbar {
+  height: 70px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 40px;
+  border-bottom: 1px solid var(--border-color);
+  background-color: var(--white);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+.nav-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.admin-logo {
+  width: 160px;
+  cursor: pointer;
+}
+
+.role-badge {
+  border: 1px solid var(--primary);
+  color: var(--primary);
+  padding: 3px 12px;
+  border-radius: 50px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.theme-toggle-btn {
+  padding: 8px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  border: none;
+  background: transparent;
+}
+
+.theme-toggle-btn:hover {
+  background-color: var(--secondary);
+}
+
+.admin-logout-btn {
+  background-color: var(--primary);
+  color: var(--white);
+  padding: 10px 30px;
+  border-radius: 50px;
+  font-weight: 600;
+  font-size: 14px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.admin-logout-btn:hover {
+  background-color: var(--primary-hover);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+}
+
+@media (max-width: 640px) {
+  .admin-navbar {
+    padding: 15px 20px;
+  }
+  .admin-logo {
+    width: 120px;
+  }
+  .admin-logout-btn {
+    padding: 8px 20px;
+  }
+}

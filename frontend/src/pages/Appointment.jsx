@@ -25,6 +25,10 @@ const Appointment = () => {
   const [availability, setAvailability] = useState([]);
   const [step, setStep] = useState(1); // 1: Select Slot, 2: Review & Book
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
+
   const navigate = useNavigate();
 
   const fetchDocInfo = async () => {
@@ -235,99 +239,94 @@ const Appointment = () => {
   }, [docInfo, availability]);
 
   return docInfo ? (
-    <div>
-      {/* Step Indicator */}
-      <div className="flex items-center justify-center my-8">
+    <div className="animate-fade-in max-w-6xl mx-auto px-4">
+      {/* Step Indicator - Compact and Teal */}
+      <div className="flex items-center justify-center my-6 hidden sm:flex">
         <div
-          className={`flex items-center ${step >= 1 ? "text-primary" : "text-gray-400"}`}
+          className={`flex items-center ${step >= 1 ? "text-[#0FB9B1]" : "text-gray-400"}`}
         >
           <div
-            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${step >= 1 ? "border-primary bg-primary text-white" : "border-gray-300"}`}
+            className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm ${step >= 1 ? "bg-[#0FB9B1] text-white" : "bg-gray-200 text-gray-400"}`}
           >
             1
           </div>
-          <span className="ml-2 font-medium">Select Slot</span>
+          <span className="ml-3 font-bold text-sm uppercase tracking-wider">Select Slot</span>
         </div>
-        <div className="w-16 h-1 bg-gray-300 mx-4">
+        <div className="w-20 h-0.5 bg-gray-100 mx-6 relative overflow-hidden">
           <div
-            className={`h-full bg-primary transition-all duration-300 ${step === 2 ? "w-full" : "w-0"}`}
+            className="absolute top-0 left-0 h-full bg-[#0FB9B1] transition-all duration-500"
+            style={{ width: step === 2 ? '100%' : '0%' }}
           ></div>
         </div>
         <div
-          className={`flex items-center ${step >= 2 ? "text-primary" : "text-gray-400"}`}
+          className={`flex items-center ${step >= 2 ? "text-[#0FB9B1]" : "text-gray-400"}`}
         >
           <div
-            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center ${step >= 2 ? "border-primary bg-primary text-white" : "border-gray-300"}`}
+            className={`w-7 h-7 rounded-lg flex items-center justify-center font-bold text-sm ${step >= 2 ? "bg-[#0FB9B1] text-white" : "bg-gray-200 text-gray-400"}`}
           >
             2
           </div>
-          <span className="ml-2 font-medium">Review & Book</span>
+          <span className="ml-3 font-bold text-sm uppercase tracking-wider">Review & Book</span>
         </div>
       </div>
 
-      {/* Content Info */}
-      <div className="flex flex-col sm:flex-row gap-4">
-        <div className="w-full sm:max-w-72">
-          <img
-            className="bg-primary w-full rounded-lg object-cover"
-            src={docInfo.image}
-            alt=""
-          />
-        </div>
-
-        <div className="flex-1 border border-gray-200 dark:border-gray-700 rounded-lg p-8 py-7 bg-white dark:bg-gray-800 mx-2 sm:mx-0 mt-[-80px] sm:mt-0 shadow-sm">
-          <div className="flex items-center gap-2 text-3xl font-medium text-gray-700 dark:text-gray-200">
-            <p>{docInfo.name}</p>
-            <img className="w-5" src={assets.verified_icon} alt="" />
-          </div>
-          {docInfo.reviewCount > 0 && (
-            <div className="flex items-center gap-2 mt-1">
-              <StarRating rating={docInfo.rating} size="sm" />
-              <span className="text-sm text-gray-500">
-                ({docInfo.reviewCount} reviews)
-              </span>
+      {/* Doctor Info Card */}
+      {step === 1 && (
+        <div className="flex flex-col sm:flex-row gap-8 mb-10 items-start">
+            <div className="w-full sm:w-64 flex-shrink-0">
+                <img
+                    className="bg-[#f0f9fa] w-full rounded-2xl shadow-md border-2 border-white object-cover aspect-square"
+                    src={docInfo.image}
+                    alt=""
+                />
             </div>
-          )}
-          <div className="flex items-center gap-2 mt-1 text-gray-600 dark:text-gray-400">
-            <p>
-              {docInfo.degree} - {docInfo.speciality}
-            </p>
-            <button className="py-0.5 px-2 border dark:border-gray-600 text-xs rounded-full">
-              {docInfo.experience}
-            </button>
-          </div>
 
-          <div className="mt-3">
-            <p className="flex items-center gap-1 text-sm font-medium text-gray-800 dark:text-gray-200">
-              About <img className="w-3" src={assets.info_icon} alt="" />
-            </p>
-            <p className="text-sm text-gray-600 dark:text-gray-400 max-w-[700px] mt-1">
-              {docInfo.about}
-            </p>
-          </div>
-          <p className="text-gray-600 dark:text-gray-400 font-medium mt-4">
-            Appointment fee:{" "}
-            <span className="text-gray-800 dark:text-gray-200 font-bold">
-              {currencySymbol}
-              {docInfo.fees}
-            </span>{" "}
-          </p>
+            <div className="flex-1 bg-white border-2 border-[#f0f9fa] rounded-3xl p-8 lg:p-10 shadow-sm relative">
+                <div className="flex items-center gap-3">
+                    <p className="text-3xl font-extrabold text-gray-900">{docInfo.name}</p>
+                    <img className="w-6" src={assets.verified_icon} alt="" />
+                </div>
+                
+                <div className="flex items-center gap-3 mt-3">
+                    <p className="text-[#0FB9B1] font-bold bg-[#f0f9fa] px-4 py-1.5 rounded-full text-xs uppercase tracking-wide">
+                        {docInfo.degree} - {docInfo.speciality}
+                    </p>
+                    <span className="py-1 px-3 border-2 border-[#f0f9fa] text-xs font-bold rounded-full text-gray-400">
+                        {docInfo.experience}
+                    </span>
+                </div>
+
+                <div className="mt-6 pt-6 border-t-2 border-[#f0f9fa]">
+                    <p className="flex items-center gap-2 text-sm font-bold text-gray-800 mb-2 uppercase tracking-wide">
+                        <span className="w-1.5 h-1.5 bg-[#0FB9B1] rounded-full"></span>
+                        Overview
+                    </p>
+                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-3">
+                        {docInfo.about}
+                    </p>
+                </div>
+
+                <div className="mt-6 flex items-baseline gap-2">
+                    <p className="text-gray-400 font-bold text-xs uppercase tracking-widest">Consultation Fee</p>
+                    <p className="text-2xl font-black text-[#0FB9B1]">
+                        {currencySymbol}{docInfo.fees}
+                    </p>
+                </div>
+            </div>
         </div>
-      </div>
+      )}
 
-      {/* Booking Flow */}
-      <div className="mt-8 flex flex-col lg:flex-row gap-8">
+      {/* Booking Flow Content */}
+      <div className="flex flex-col lg:flex-row gap-10">
         <div className="flex-1">
           {step === 1 && (
-            <div className="animate-fade-in transition-all duration-500">
-              <div className="flex flex-col md:flex-row gap-6 mb-8">
+            <div className="animate-slide-up">
+              <div className="flex flex-col xl:flex-row gap-8 mb-10">
                 <div className="flex-1">
-                  <p className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
-                    <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-sm">
-                      01
-                    </span>
+                  <h2 className="text-lg font-extrabold mb-5 text-gray-800 flex items-center gap-3">
+                    <span className="bg-[#0FB9B1] text-white w-6 h-6 rounded flex items-center justify-center text-xs">A</span>
                     Select Appointment Date
-                  </p>
+                  </h2>
                   <CalendarDatePicker
                     selectedDate={
                       docSlots[slotIndex] && docSlots[slotIndex][0]
@@ -344,7 +343,6 @@ const Appointment = () => {
                       if (index !== -1) {
                         setSlotIndex(index);
                         setSlotTime("");
-                        // Auto-select first available slot on this day
                         const firstAvailable = docSlots[index].find(
                           (s) => s.available,
                         );
@@ -358,113 +356,51 @@ const Appointment = () => {
                 </div>
 
                 <div className="flex-1">
-                  <p className="text-xl font-semibold mb-4 flex items-center gap-2 text-gray-800 dark:text-gray-100">
-                    <span className="w-8 h-8 rounded-lg bg-primary/10 text-primary flex items-center justify-center text-sm">
-                      02
-                    </span>
-                    Available Time Slots
-                  </p>
+                  <h2 className="text-lg font-extrabold mb-5 text-gray-800 flex items-center gap-3">
+                    <span className="bg-[#0FB9B1] text-white w-6 h-6 rounded flex items-center justify-center text-xs">B</span>
+                    Pick a Time Slot
+                  </h2>
 
                   {docSlots.length > 0 &&
                     docSlots[slotIndex] &&
                     docSlots[slotIndex].length > 0 ? (
-                    <div className="bg-gray-50 dark:bg-gray-900/50 p-6 rounded-2xl border border-gray-100 dark:border-gray-800 h-full min-h-[300px]">
+                    <div className="bg-[#f0f9fa]/50 p-6 rounded-3xl border-2 border-white shadow-sm h-full min-h-[350px]">
                       {(() => {
                         const groups = groupSlotsByPeriod(docSlots[slotIndex]);
                         return (
-                          <>
+                          <div className="space-y-6">
                             <SlotGroup
                               title="Morning"
                               slots={groups.morning}
                               selectedTime={slotTime}
                               onSelectSlot={setSlotTime}
-                              icon={
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 text-orange-400"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
-                                  />
-                                </svg>
-                              }
+                              icon={<span className="text-orange-400">☀️</span>}
                             />
                             <SlotGroup
                               title="Afternoon"
                               slots={groups.afternoon}
                               selectedTime={slotTime}
                               onSelectSlot={setSlotTime}
-                              icon={
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 text-yellow-500"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364-6.364l-.707.707M6.343 17.657l-.707.707m12.728 0l-.707-.707M6.343 6.343l-.707-.707M12 8a4 4 0 100 8 4 4 0 000-8z"
-                                  />
-                                </svg>
-                              }
+                              icon={<span className="text-blue-400">🌤️</span>}
                             />
                             <SlotGroup
                               title="Evening"
                               slots={groups.evening}
                               selectedTime={slotTime}
                               onSelectSlot={setSlotTime}
-                              icon={
-                                <svg
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  className="h-4 w-4 text-indigo-500"
-                                  fill="none"
-                                  viewBox="0 0 24 24"
-                                  stroke="currentColor"
-                                >
-                                  <path
-                                    strokeLinecap="round"
-                                    strokeLinejoin="round"
-                                    strokeWidth={2}
-                                    d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
-                                  />
-                                </svg>
-                              }
+                              icon={<span className="text-indigo-400">🌙</span>}
                             />
-                          </>
+                          </div>
                         );
                       })()}
                     </div>
                   ) : (
-                    <div className="bg-orange-50 dark:bg-orange-900/10 border border-orange-100 dark:border-orange-800 p-6 rounded-2xl h-full flex flex-col justify-center items-center text-center">
-                      <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-12 w-12 text-orange-300 mb-2"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"
-                        />
-                      </svg>
-                      <p className="text-orange-800 dark:text-orange-400 font-medium">
-                        No slots available for this day.
-                      </p>
+                    <div className="bg-[#f0f9fa] border-2 border-dashed border-[#0FB9B1]/20 p-10 rounded-3xl h-full flex flex-col justify-center items-center text-center">
+                      <p className="text-gray-400 font-bold mb-2 uppercase tracking-widest text-xs">Unavailable</p>
+                      <p className="text-slate-500 font-medium">No slots available for this day.</p>
                       {findNextAvailable() && (
-                        <p className="text-sm text-orange-600 dark:text-orange-500 mt-2 italic">
-                          Next available appointment: {findNextAvailable()}
+                        <p className="text-xs text-[#0FB9B1] font-bold mt-4 px-4 py-2 bg-white rounded-full shadow-sm">
+                          Next Slot: {findNextAvailable()}
                         </p>
                       )}
                     </div>
@@ -472,113 +408,107 @@ const Appointment = () => {
                 </div>
               </div>
 
-              <div className="flex justify-end">
+              <div className="flex justify-end pt-4">
                 <button
                   onClick={() =>
                     slotTime
                       ? setStep(2)
                       : toast.info("Please select a time slot")
                   }
-                  className={`px-10 py-4 rounded-2xl text-white font-bold transition-all transform hover:scale-105 active:scale-95 ${slotTime ? "bg-primary hover:bg-indigo-600 shadow-xl" : "bg-gray-300 cursor-not-allowed"}`}
+                  className="group flex items-center gap-3 px-12 py-4 rounded-full text-white font-bold transition-all shadow-xl active:scale-95"
+                  style={{ backgroundColor: slotTime ? '#0FB9B1' : '#e2e8f0', cursor: slotTime ? 'pointer' : 'not-allowed' }}
                 >
-                  Proceed to Booking
+                  Proceed to Review
+                  <span className="bg-white/20 p-1 rounded-full group-hover:translate-x-1 transition-transform">→</span>
                 </button>
               </div>
             </div>
           )}
 
           {step === 2 && (
-            <div className="animate-fade-in bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-sm relative overflow-hidden transition-all duration-500">
-              <div className="absolute top-0 left-0 w-2 h-full bg-primary"></div>
-              <p className="text-2xl font-bold mb-6 text-gray-800 dark:text-gray-100">
-                Confirm Appointment
-              </p>
+            <div className="animate-slide-up bg-white p-10 rounded-[40px] border-2 border-[#f0f9fa] shadow-sm relative overflow-hidden">
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#0FB9B1]/5 rounded-full -mr-16 -mt-16"></div>
+              
+              <h2 className="text-3xl font-black mb-10 text-gray-900 border-b-2 border-[#f0f9fa] pb-6">
+                Review <span className="text-[#0FB9B1]">&</span> Confirm
+              </h2>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                <div className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div className="space-y-8">
                   <div>
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">
-                      Doctor Information
-                    </p>
-                    <div className="flex items-center gap-3 mt-2">
+                    <h3 className="text-xs text-gray-400 font-black uppercase tracking-[0.2em] mb-4">
+                      Medical Professional
+                    </h3>
+                    <div className="flex items-center gap-4 p-4 bg-[#f0f9fa] rounded-2xl border border-white">
                       <img
                         src={docInfo.image}
-                        className="w-10 h-10 rounded-full bg-primary/10"
+                        className="w-14 h-14 rounded-xl object-cover bg-[#0FB9B1]/20 shadow-sm"
                         alt=""
                       />
                       <div>
-                        <p className="text-lg font-bold">{docInfo.name}</p>
-                        <p className="text-gray-500 text-sm">
+                        <p className="text-lg font-black text-gray-900">{docInfo.name}</p>
+                        <p className="text-[#0FB9B1] text-xs font-bold uppercase tracking-wider">
                           {docInfo.speciality}
                         </p>
                       </div>
                     </div>
                   </div>
+                  
                   <div>
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">
-                      Location
-                    </p>
-                    <p className="mt-1 font-medium italic text-gray-600 dark:text-gray-400">
-                      Main Clinic, HealthLoop Center
-                    </p>
+                    <h3 className="text-xs text-gray-400 font-black uppercase tracking-[0.2em] mb-4">
+                      Center Location
+                    </h3>
+                    <div className="flex items-center gap-3">
+                        <div className="w-10 h-10 bg-[#0FB9B1]/10 rounded-full flex items-center justify-center text-[#0FB9B1]">📍</div>
+                        <p className="font-bold text-gray-700">Main MediCare Center, HealthLoop Park</p>
+                    </div>
                   </div>
                 </div>
-                <div className="space-y-4">
+
+                <div className="space-y-8">
                   <div>
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">
-                      Appointment Schedule
-                    </p>
-                    <div className="mt-2 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-xl border border-gray-100 dark:border-gray-700">
-                      <p className="text-lg font-bold text-primary">
+                    <h3 className="text-xs text-gray-400 font-black uppercase tracking-[0.2em] mb-4">
+                      Chosen Schedule
+                    </h3>
+                    <div className="p-6 bg-[#0FB9B1] rounded-3xl border-2 border-white shadow-xl">
+                      <p className="text-sm font-bold text-white/80 mb-1 uppercase tracking-widest">
                         {docSlots[slotIndex][0] &&
                           docSlots[slotIndex][0].datetime.toLocaleDateString(
                             "en-US",
                             { weekday: "long", day: "numeric", month: "long" },
                           )}
                       </p>
-                      <p className="text-2xl font-black mt-1 uppercase">
+                      <p className="text-4xl font-black text-white tabular-nums">
                         {slotTime}
                       </p>
                     </div>
                   </div>
-                  <div>
-                    <p className="text-gray-400 text-xs uppercase tracking-wider font-bold">
-                      Consultation Fee
-                    </p>
-                    <p className="text-2xl font-bold text-gray-800 dark:text-gray-100">
-                      {currencySymbol}
-                      {docInfo.fees}
-                    </p>
+                  
+                  <div className="bg-[#f0f9fa] p-6 rounded-2xl border border-white">
+                    <div className="flex justify-between items-center">
+                        <p className="text-xs text-gray-400 font-black uppercase tracking-[0.2em]">Total Consultation Fee</p>
+                        <p className="text-3xl font-black text-gray-900">
+                            {currencySymbol}{docInfo.fees}
+                        </p>
+                    </div>
                   </div>
                 </div>
               </div>
 
-              <div className="flex justify-between items-center mt-10 pt-6 border-t dark:border-gray-700">
+              <div className="flex flex-col sm:flex-row justify-between items-center mt-12 pt-8 border-t-2 border-[#f0f9fa] gap-6">
                 <button
                   onClick={() => setStep(1)}
-                  className="text-gray-500 hover:text-primary transition-colors font-medium flex items-center gap-2"
+                  className="w-full sm:w-auto text-gray-400 hover:text-[#0FB9B1] transition-all font-bold flex items-center gap-2 group"
                 >
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-4 w-4"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M10 19l-7-7 7-7"
-                    />
-                  </svg>
-                  Go Back
+                  <span className="group-hover:-translate-x-1 transition-transform">←</span>
+                  Modify Details
                 </button>
                 <button
                   onClick={bookAppointment}
-                  className="bg-secondary hover:brightness-110 text-white font-bold px-12 py-4 rounded-2xl shadow-xl shadow-secondary/20 transition-all transform hover:scale-105 active:scale-95"
+                  className="w-full sm:w-auto bg-[#0FB9B1] hover:brightness-110 text-white font-extrabold px-16 py-4 rounded-full shadow-2xl shadow-[#0FB9B1]/20 transition-all transform hover:scale-[1.02] active:scale-95 flex items-center justify-center gap-3"
                 >
-                  Confirm & Secure Booking
+                  Confirm & Secure Booking 
+                  <span className="text-lg">✨</span>
                 </button>
               </div>
             </div>
@@ -587,29 +517,38 @@ const Appointment = () => {
 
         {step === 1 && (
           <div className="w-full lg:w-80">
-            <AppointmentSummary
-              docInfo={docInfo}
-              selectedDate={
-                docSlots[slotIndex] && docSlots[slotIndex][0]
-                  ? docSlots[slotIndex][0].datetime
-                  : null
-              }
-              selectedTime={slotTime}
-              currencySymbol={currencySymbol}
-            />
+            <div className="sticky top-24">
+                <AppointmentSummary
+                  docInfo={docInfo}
+                  selectedDate={
+                    docSlots[slotIndex] && docSlots[slotIndex][0]
+                      ? docSlots[slotIndex][0].datetime
+                      : null
+                  }
+                  selectedTime={slotTime}
+                  currencySymbol={currencySymbol}
+                />
+            </div>
           </div>
         )}
       </div>
 
-      <DoctorReviews doctorId={docId} />
-
-      <RelatedDoctors speciality={docInfo.speciality} docId={docId} />
+      {step === 1 && (
+        <div className="mt-20">
+            <DoctorReviews doctorId={docId} />
+            <div className="mt-16">
+                <RelatedDoctors speciality={docInfo.speciality} docId={docId} />
+            </div>
+        </div>
+      )}
     </div>
   ) : (
-    <div className="flex flex-col gap-4 p-4">
-      <Skeleton className="h-64 rounded-lg w-full md:w-1/3" />
-      <Skeleton className="h-32 rounded-lg w-full" />
-      <Skeleton className="h-20 rounded-lg w-full" />
+    <div className="flex flex-col gap-8 max-w-6xl mx-auto px-4 mt-10">
+      <Skeleton className="h-64 w-full rounded-3xl" />
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <Skeleton className="h-96 rounded-3xl" />
+          <Skeleton className="h-96 rounded-3xl" />
+      </div>
     </div>
   );
 };
