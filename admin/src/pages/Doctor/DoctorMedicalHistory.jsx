@@ -14,7 +14,7 @@ const DoctorMedicalHistory = () => {
   const fetchDoctorHistory = async () => {
     try {
       const { data } = await axios.get(`${backendUrl}/api/medical-history/doctor`, {
-        headers: { dToken }
+        headers: { token: dToken }
       })
       if (data.success) {
         setHistory(data.history)
@@ -30,7 +30,7 @@ const DoctorMedicalHistory = () => {
   const deleteRecord = async (id) => {
     try {
       const { data } = await axios.delete(`${backendUrl}/api/medical-history/${id}`, {
-        headers: { dToken }
+        headers: { token: dToken }
       })
       
       if (data.success) {

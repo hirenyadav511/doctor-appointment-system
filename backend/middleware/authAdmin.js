@@ -3,11 +3,11 @@ import jwt from "jsonwebtoken"
 // admin authentication middleware
 const authAdmin = async (req, res, next) => {
     try {
-        const { atoken } = req.headers
-        if (!atoken) {
+        const { token } = req.headers
+        if (!token) {
             return res.json({ success: false, message: 'Not Authorized Login Again' })
         }
-        const token_decode = jwt.verify(atoken, process.env.JWT_SECRET)
+        const token_decode = jwt.verify(token, process.env.JWT_SECRET)
 
         // Keep in sync with `controllers/adminController.js` dev defaults.
         const adminEmail = process.env.ADMIN_EMAIL || "admin@example.com";

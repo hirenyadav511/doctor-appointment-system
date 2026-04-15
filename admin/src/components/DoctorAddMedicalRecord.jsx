@@ -85,7 +85,7 @@ const DoctorAddMedicalRecord = ({ appointmentId, patientId, onClose, onSuccess }
       const { data } = await axios.post(
         backendUrl + '/api/medical-history/add',
         payload,
-        { headers: { dToken } }
+        { headers: { token: dToken } }
       )
       
       if (data.success) {

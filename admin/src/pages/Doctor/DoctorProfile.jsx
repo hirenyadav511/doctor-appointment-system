@@ -18,7 +18,7 @@ const DoctorProfile = () => {
                 about: profileData.about,
                 available: profileData.available
             }
-            const { data } = await axios.post(backendUrl + '/api/doctor/update-profile', updateData, { headers: { dToken } })
+            const { data } = await axios.post(backendUrl + '/api/doctor/update-profile', updateData, { headers: { token: dToken } })
             if (data.success) {
                 toast.success(data.message)
                 setIsEdit(false)
