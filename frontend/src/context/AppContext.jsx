@@ -7,8 +7,9 @@ export const AppContext = createContext();
 const AppContextProvider = (props) => {
   const currencySymbol = "₹";
   // Allow running without a frontend/.env in local dev
-  const backendUrl =
-    import.meta.env.VITE_BACKEND_URL || "http://localhost:5001";
+  // const backendUrl =
+  //   import.meta.env.VITE_BACKEND_URL || "http://localhost:5001";
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
   const [doctors, setDoctors] = useState([]);
   const [token, setToken] = useState(
