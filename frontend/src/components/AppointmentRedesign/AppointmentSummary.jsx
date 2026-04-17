@@ -4,44 +4,38 @@ const AppointmentSummary = ({ docInfo, selectedDate, selectedTime, currencySymbo
     if (!docInfo) return null;
 
     return (
-        <div className="bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-2xl p-6 shadow-sm sticky top-10 animate-fade-in">
-            <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-100 mb-4 flex items-center gap-2">
-                <span className="w-1.5 h-6 bg-[#0FB9B1] rounded-full"></span>
+        <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm sticky top-10">
+            <h3 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-5 border-b border-gray-50 pb-2">
                 Appointment Summary
             </h3>
             
-            <div className="space-y-4">
-                <div className="flex items-start gap-3">
-                    <img src={docInfo.image} alt={docInfo.name} className="w-12 h-12 rounded-lg bg-[#0FB9B1]/10 object-cover" />
+            <div className="space-y-5">
+                <div className="flex items-center gap-3">
+                    <img src={docInfo.image} alt={docInfo.name} className="w-10 h-10 rounded bg-gray-50 object-cover" />
                     <div>
-                        <p className="text-sm text-gray-500 dark:text-gray-400">Doctor</p>
-                        <p className="font-medium text-gray-800 dark:text-gray-200">{docInfo.name}</p>
-                        <p className="text-xs text-gray-500">{docInfo.speciality}</p>
+                        <p className="text-xs font-bold text-gray-800">{docInfo.name}</p>
+                        <p className="text-[10px] text-gray-400">{docInfo.speciality}</p>
                     </div>
                 </div>
 
-                <div className="grid grid-cols-2 gap-4 border-t border-b border-gray-100 dark:border-gray-700 py-4">
+                <div className="grid grid-cols-2 gap-4 py-3 border-y border-gray-50">
                     <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
-                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span> Date
-                        </p>
-                        <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                            {selectedDate ? selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : 'Not selected'}
+                        <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Date</p>
+                        <p className="text-xs font-semibold text-gray-700">
+                            {selectedDate ? selectedDate.toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : '---'}
                         </p>
                     </div>
                     <div>
-                        <p className="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
-                            <span className="w-1 h-1 bg-gray-400 rounded-full"></span> Time
-                        </p>
-                        <p className="text-sm font-medium text-gray-800 dark:text-gray-200">
-                            {selectedTime || 'Not selected'}
+                        <p className="text-[10px] text-gray-400 font-bold uppercase mb-1">Time</p>
+                        <p className="text-xs font-semibold text-gray-700">
+                            {selectedTime || '---'}
                         </p>
                     </div>
                 </div>
 
-                <div className="flex justify-between items-center pt-2">
-                    <span className="text-gray-600 dark:text-gray-400">Consultation Fee</span>
-                    <span className="text-xl font-bold text-gray-900 dark:text-gray-100">{currencySymbol}{docInfo.fees}</span>
+                <div className="flex justify-between items-center pt-1">
+                    <span className="text-[10px] text-gray-400 font-bold uppercase tracking-widest">Consultation Fee</span>
+                    <span className="text-lg font-bold text-gray-900">{currencySymbol}{docInfo.fees}</span>
                 </div>
             </div>
         </div>

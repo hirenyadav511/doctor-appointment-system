@@ -5,25 +5,20 @@ const SlotGroup = ({ title, slots, selectedTime, onSelectSlot, icon }) => {
 
     return (
         <div className="mb-6 animate-fade-in">
-            <h4 className="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3 flex items-center gap-2">
+            <h4 className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-3 flex items-center gap-2">
                 {icon}
                 {title}
             </h4>
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2">
                 {slots.map((item, index) => {
                     const isSelected = item.time === selectedTime;
                     const isBooked = !item.available;
-                    const isFewLeft = item.availabilityStatus === 'few';
 
-                    let statusClasses = "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:border-[#0FB9B1]";
+                    let statusClasses = "border-gray-50 bg-white text-gray-600 hover:border-[#0FB9B1]/30 hover:bg-gray-50";
                     if (isSelected) {
-                        statusClasses = "bg-[#0FB9B1] text-white border-[#0FB9B1] shadow-md scale-105";
+                        statusClasses = "bg-[#0FB9B1] text-white border-[#0FB9B1] font-bold";
                     } else if (isBooked) {
-                        statusClasses = "bg-gray-100 dark:bg-gray-700 text-gray-400 dark:text-gray-500 border-gray-100 dark:border-gray-700 cursor-not-allowed opacity-60";
-                    } else if (isFewLeft) {
-                        statusClasses = "border-yellow-400 text-yellow-700 dark:text-yellow-500 hover:bg-yellow-50 dark:hover:bg-yellow-900/20";
-                    } else {
-                        statusClasses = "border-green-400 text-green-700 dark:text-green-500 hover:bg-green-50 dark:hover:bg-green-900/20";
+                        statusClasses = "bg-gray-50 text-gray-300 border-gray-50 cursor-not-allowed opacity-40";
                     }
 
                     return (
@@ -31,7 +26,7 @@ const SlotGroup = ({ title, slots, selectedTime, onSelectSlot, icon }) => {
                             key={index}
                             disabled={isBooked}
                             onClick={() => onSelectSlot(item.time)}
-                            className={`px-4 py-2 rounded-xl border text-sm font-medium transition-all duration-300 ${statusClasses}`}
+                            className={`px-3 py-1.5 rounded-md border text-xs transition-all duration-200 ${statusClasses}`}
                         >
                             {item.time}
                         </button>

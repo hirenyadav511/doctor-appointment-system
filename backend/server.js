@@ -24,13 +24,23 @@ connectCloudinary();
 
 // Middlewares
 app.use(express.json());
-app.use(cors({
-  origin: [
+
+const allowedOrigins = process.env.NODE_ENV === "production"
+  ? [
     "https://doctor-appointment-system-bpux.vercel.app",
     "https://doctor-appointment-system-woad-eight.vercel.app"
-  ],
+  ]
+  : [
+    "http://localhost:5173",
+    "http://localhost:5174",
+    "http://localhost:5175"
+  ];
+
+app.use(cors({
+  origin: allowedOrigins,
   credentials: true
 }));
+
 app.options("*", cors());
 
 // API routes
