@@ -1,6 +1,7 @@
 import React, { useContext } from 'react'
 import { DoctorContext } from './context/DoctorContext';
 import { AdminContext } from './context/AdminContext';
+import ScrollToTop from './components/ScrollToTop';
 import { Route, Routes } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -24,6 +25,7 @@ const App = () => {
 
   return dToken || aToken ? (
     <div className='bg-[#F8F9FD]'>
+      <ScrollToTop />
       <ToastContainer />
       <Navbar />
       <div className='flex items-start'>
@@ -48,6 +50,7 @@ const App = () => {
     </div>
   ) : (
     <>
+      <ScrollToTop />
       <ToastContainer />
       <Login />
     </>

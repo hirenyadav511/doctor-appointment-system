@@ -1,5 +1,6 @@
 import Navbar from "./components/Navbar";
 import ClerkSync from "./components/ClerkSync";
+import ScrollToTop from "./components/ScrollToTop";
 import { Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Doctors from "./pages/Doctors";
@@ -19,6 +20,7 @@ import Payment from "./pages/Payment";
 const App = () => {
   return (
     <div>
+      <ScrollToTop />
       <ClerkSync />
       <ToastContainer />
       <Navbar />
