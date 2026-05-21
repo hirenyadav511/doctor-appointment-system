@@ -19,7 +19,7 @@
 
 @layer base {
   body {
-    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300 ease-in-out font-outfit;
+    @apply bg-white text-gray-900 dark:bg-gray-900 dark:text-white transition-colors duration-300 ease-in-out font-outfit overflow-x-hidden;
     color: var(--text-main);
     background-color: var(--white);
   }

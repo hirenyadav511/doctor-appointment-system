@@ -10,7 +10,7 @@
 * **Backend**: Node.js, Express.js
 * **Database**: MongoDB
 * **Payment Gateway**: Stripe
-* **Authentication**: JSON Web Token (JWT)
+* **Authentication**: clerk
 
 ---
 

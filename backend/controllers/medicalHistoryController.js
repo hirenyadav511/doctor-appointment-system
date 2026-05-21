@@ -54,7 +54,7 @@ const getPatientHistory = async (req, res) => {
   try {
     const userId = req.body.userId;
 
-    const history = await medicalHistoryModel.find({ patientId: userId }).populate("doctorId", "name speciality").populate("appointmentId", "slotDate slotTime").sort({ createdAt: -1 });
+    const history = await medicalHistoryModel.find({ patientId: userId }).populate("doctorId", "name speciality image").populate("appointmentId", "slotDate slotTime").sort({ createdAt: -1 });
     res.json({ success: true, history });
 
   } catch (error) {

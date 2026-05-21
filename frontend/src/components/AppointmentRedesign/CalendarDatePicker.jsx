@@ -1,6 +1,6 @@
-import React, { useState } from 'react'
+import React, { useState } from 'react';
 
-const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
+const CalendarDatePicker = ({ selectedDate, onDateSelect, docSlots = [] }) => {
     const [currentMonth, setCurrentMonth] = useState(new Date(selectedDate || new Date()));
 
     const daysInMonth = (year, month) => new Date(year, month + 1, 0).getDate();
@@ -12,19 +12,30 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
         setCurrentMonth(nextMonth);
     };
 
+    const getSlotInfoForDate = (date) => {
+        const daySlots = docSlots.find(
+            (item) => item[0] && item[0].datetime.toDateString() === date.toDateString()
+        );
+        if (!daySlots) return null;
+
+        const availableCount = daySlots.filter((s) => s.available).length;
+        const totalCount = daySlots.length;
+        return { availableCount, totalCount };
+    };
+
     const renderHeader = () => {
         const monthName = currentMonth.toLocaleString('default', { month: 'long' });
         const year = currentMonth.getFullYear();
 
         return (
             <div className="flex items-center justify-between mb-6">
-                <h3 className="text-sm font-bold text-gray-700 uppercase tracking-widest">{monthName} {year}</h3>
-                <div className="flex gap-1">
-                    <button type="button" onClick={() => changeMonth(-1)} className="p-1.5 rounded bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                <h3 className="text-sm font-bold text-gray-800 uppercase tracking-widest">{monthName} {year}</h3>
+                <div className="flex gap-2">
+                    <button type="button" onClick={() => changeMonth(-1)} className="p-2 rounded-lg bg-gray-50 hover:bg-[#0FB9B1] hover:text-white transition-colors border border-gray-100 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
                     </button>
-                    <button type="button" onClick={() => changeMonth(1)} className="p-1.5 rounded bg-gray-50 hover:bg-gray-100 transition-colors border border-gray-100">
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-3.5 w-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                    <button type="button" onClick={() => changeMonth(1)} className="p-2 rounded-lg bg-gray-50 hover:bg-[#0FB9B1] hover:text-white transition-colors border border-gray-100 shadow-sm">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
                     </button>
                 </div>
             </div>
@@ -34,9 +45,9 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
     const renderDaysOfWeek = () => {
         const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
         return (
-            <div className="grid grid-cols-7 mb-3">
+            <div className="grid grid-cols-7 mb-4">
                 {days.map(day => (
-                    <div key={day} className="text-center text-[10px] font-bold text-gray-400 uppercase tracking-tighter">{day}</div>
+                    <div key={day} className="text-center text-[11px] font-extrabold text-gray-400 uppercase tracking-widest">{day}</div>
                 ))}
             </div>
         );
@@ -58,29 +69,38 @@ const CalendarDatePicker = ({ selectedDate, onDateSelect, availableDates }) => {
             const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
             const isToday = date.toDateString() === today.toDateString();
             const isPast = date < today;
+            const slotInfo = getSlotInfoForDate(date);
+            const hasSlots = slotInfo !== null;
+            const isAvailable = hasSlots && slotInfo.availableCount > 0;
+            const isFullyBooked = hasSlots && slotInfo.availableCount === 0;
 
             cells.push(
-                <div key={d} className="p-0.5">
+                <div key={d} className="p-1">
                     <button
                         type="button"
-                        disabled={isPast}
-                        onClick={() => onDateSelect(date)}
-                        className={`w-full aspect-square flex items-center justify-center rounded-md text-xs transition-all
-                            ${isPast ? 'text-gray-200 cursor-not-allowed' : 'hover:bg-gray-50 hover:text-[#0FB9B1]'}
-                            ${isSelected ? 'bg-[#0FB9B1] text-white hover:bg-[#0FB9B1] hover:text-white font-bold' : 'text-gray-600'}
-                            ${isToday && !isSelected ? 'underline underline-offset-4 decoration-[#0FB9B1]' : ''}
+                        disabled={isPast || (!hasSlots && !isToday) || isFullyBooked}
+                        onClick={() => hasSlots && !isFullyBooked && onDateSelect(date)}
+                        className={`w-full aspect-square flex flex-col items-center justify-center rounded-xl transition-colors relative
+                            ${isPast || (!hasSlots && !isToday) || isFullyBooked ? 'text-gray-300 cursor-not-allowed bg-gray-50/50' : 'hover:bg-gray-50 hover:text-[#0FB9B1]'}
+                            ${isSelected ? 'bg-[#0FB9B1] text-white font-bold' : 'text-gray-700'}
                         `}
                     >
-                        {d}
+                        <span className="text-sm">{d}</span>
+                        {hasSlots && !isSelected && !isFullyBooked && (
+                            <span className="w-1 h-1 rounded-full bg-[#0FB9B1] absolute bottom-1.5"></span>
+                        )}
+                        {isToday && !isSelected && !hasSlots && (
+                             <span className="text-[9px] mt-0.5 font-medium text-[#0FB9B1]">Today</span>
+                        )}
                     </button>
                 </div>
             );
         }
-        return <div className="grid grid-cols-7">{cells}</div>;
+        return <div className="grid grid-cols-7 gap-1">{cells}</div>;
     };
 
     return (
-        <div className="bg-white border border-gray-100 rounded-xl p-5 shadow-sm">
+        <div className="bg-white border border-gray-100 rounded-2xl p-6 shadow-sm">
             {renderHeader()}
             {renderDaysOfWeek()}
             {renderCells()}

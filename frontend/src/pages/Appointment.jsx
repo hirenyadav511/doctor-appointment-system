@@ -235,7 +235,7 @@ const Appointment = () => {
                   <CalendarDatePicker
                     selectedDate={docSlots[slotIndex]?.[0]?.datetime || new Date()}
                     onDateSelect={(date) => {
-                      const index = docSlots.findIndex(item => item[0]?.datetime.toDateString() === date.toDateString());
+                      const index = docSlots.findIndex(item => item[0] && item[0].datetime.toDateString() === date.toDateString());
                       if (index !== -1) {
                         setSlotIndex(index);
                         setSlotTime("");
@@ -243,7 +243,7 @@ const Appointment = () => {
                         if (firstAvailable) setSlotTime(firstAvailable.time);
                       }
                     }}
-                    availableDates={docSlots.map(item => item[0]?.datetime).filter(Boolean)}
+                    docSlots={docSlots}
                   />
                 </div>
 
